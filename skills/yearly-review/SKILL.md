@@ -118,14 +118,43 @@ Write the inference in detected language. Skip if no clear pattern.
 Breakdown of all sources completed (`end: YYYY-` + `status: 🟩`) by type and category.
 
 ### Source types
+
+All valid source tags in this vault:
+```
+source/article/paper
+source/article/resource
+source/book
+source/course
+source/cinematic/movie
+source/cinematic/series
+source/cinematic/anime
+source/podcast
+source/video/recording
+source/video/playlist
+source/music/album
+source/music/tracklist
+source/game
+```
+
 ```bash
 # Get all sources completed this year, then count by tag:
 obsidian search query="[status: 🟩] [end: YYYY]" path=sources
-# From those files, count tags: source/book, source/article/*, source/video/*, source/course, etc.
-# Or use tag lookup per type:
-obsidian tag name="source/book" verbose          # all book files → cross-reference with completed set
-obsidian tag name="source/course" verbose        # all course files
-obsidian tag name="source/podcast" verbose       # all podcast files
+# From those files, count occurrences of each tag above.
+# Or look up each type directly:
+obsidian tag name="source/book" verbose
+obsidian tag name="source/article/paper" verbose
+obsidian tag name="source/article/resource" verbose
+obsidian tag name="source/course" verbose
+obsidian tag name="source/cinematic/movie" verbose
+obsidian tag name="source/cinematic/series" verbose
+obsidian tag name="source/cinematic/anime" verbose
+obsidian tag name="source/podcast" verbose
+obsidian tag name="source/video/recording" verbose
+obsidian tag name="source/video/playlist" verbose
+obsidian tag name="source/music/album" verbose
+obsidian tag name="source/music/tracklist" verbose
+obsidian tag name="source/game" verbose
+# Cross-reference each result with the completed set for YYYY.
 ```
 
 ### Source categories
@@ -136,9 +165,9 @@ obsidian tag name="source/podcast" verbose       # all podcast files
 
 ```markdown
 > **Intellectual diet:**
-> - By type: 📚 books: 12 | 📄 articles: 18 | 🎬 video: 8 | 📑 papers: 3 | 🎓 courses: 2
+> - By type: 📚 books: 12 | 📄 articles/resources: 11 | 📑 papers: 7 | 🎬 video/recordings: 5 | 📺 video/playlists: 3 | 🎓 courses: 2 | 🎬 movies: 2 | 📡 podcasts: 1
 > - Top categories: [[knowledge management]] (11), [[artificial intelligence]] (9), [[productivity]] (7), [[writing]] (5), [[health]] (3)
-> - Dominant type: articles (42% of total)
+> - Dominant type: books (29% of total)
 ```
 
 If one type > 60% of total — flag it: `⚠️ Heavy bias toward [type] — consider diversifying sources.`
