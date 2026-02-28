@@ -77,18 +77,19 @@ Compute the same three metrics as monthly-review, but independently for each of 
 ### Per-month computation (repeat for MM1, MM2, MM3)
 
 **Notes created:**
-```
-Grep: "created: YYYY-MM-" in base/notes/**/*.md + base/additions/**/*.md
+```bash
+obsidian search query="[created: YYYY-MM]" path=base/notes total
+obsidian search query="[created: YYYY-MM]" path=base/additions total
 ```
 
 **Tasks closed:**
-```
-Grep: "✅ YYYY-MM-\d{2}" across all .md files
+```bash
+obsidian search query="✅ YYYY-MM" total
 ```
 
 **Sources processed:**
-```
-Grep: "end: YYYY-MM-" in sources/**/*.md  (filter: status contains 🟩)
+```bash
+obsidian search query="[status: 🟩] [end: YYYY-MM]" path=sources total
 ```
 
 Format as a trend table. Use ↑ / ↓ / → arrows to indicate direction Month1→Month3 (↑ = grew >20%, ↓ = dropped >20%, → = stable within 20%):
@@ -205,27 +206,30 @@ If sources = 0 — skip ratio, write: `Sources processed: 0 — no external inpu
 What happened to projects during the quarter.
 
 ### Completed
-```
-Grep: "status: 🟩" or "status: 📢" in projects/**/*.md
-Filter: "updated:" falls within the quarter
+```bash
+obsidian search query="[status: 🟩]" path=projects
+obsidian search query="[status: 📢]" path=projects
+# Filter: keep only files where updated: frontmatter falls within the quarter
 ```
 
 ### Frozen this quarter
-```
-Grep: "status: ❄️" in projects/**/*.md
-Filter: "updated:" falls within the quarter
+```bash
+obsidian search query="[status: ❄]" path=projects
+# Filter: keep only files where updated: frontmatter falls within the quarter
 ```
 
 ### Started this quarter
-```
-Grep: "status: 🟦" or "status: 🟥" in projects/**/*.md
-Filter: "created:" falls within the quarter
+```bash
+obsidian search query="[status: 🟦]" path=projects
+obsidian search query="[status: 🟥]" path=projects
+# Filter: keep only files where created: frontmatter falls within the quarter
 ```
 
 ### Still stuck (carried from previous quarter)
-```
-Grep: "status: 🟦" or "status: 🟥" in projects/**/*.md
-Filter: "created:" predates the quarter AND "updated:" is 30+ days before today
+```bash
+obsidian search query="[status: 🟦]" path=projects
+obsidian search query="[status: 🟥]" path=projects
+# Filter: created: predates the quarter start AND updated: is 30+ days before today
 ```
 
 ```markdown

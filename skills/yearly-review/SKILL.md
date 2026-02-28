@@ -74,10 +74,16 @@ User: "yearly review" / "итоги года" / "годовой обзор"
 Compute velocity for each of the 12 months, then aggregate.
 
 **Per-month computation (all 12 months in parallel):**
-```
-Notes created:     Grep "created: YYYY-MM-" in base/notes/**/*.md + base/additions/**/*.md
-Tasks closed:      Grep "✅ YYYY-MM-\d{2}" across all .md files
-Sources processed: Grep "end: YYYY-MM-" in sources/**/*.md (filter: status contains 🟩)
+```bash
+# Notes created (run for each MM from 01 to 12):
+obsidian search query="[created: YYYY-MM]" path=base/notes total
+obsidian search query="[created: YYYY-MM]" path=base/additions total
+
+# Tasks closed (run for each MM):
+obsidian search query="✅ YYYY-MM" total
+
+# Sources processed (run for each MM):
+obsidian search query="[status: 🟩] [end: YYYY-MM]" path=sources total
 ```
 
 **Aggregate:**
@@ -112,10 +118,21 @@ Write the inference in detected language. Skip if no clear pattern.
 Breakdown of all sources completed (`end: YYYY-` + `status: 🟩`) by type and category.
 
 ### Source types
-Tags to grep in `sources/**/*.md`: `source/book`, `source/article`, `source/video`, `source/paper`, `source/course`, `source/film`, `source/podcast`. Count by type.
+```bash
+# Get all sources completed this year, then count by tag:
+obsidian search query="[status: 🟩] [end: YYYY]" path=sources
+# From those files, count tags: source/book, source/article/*, source/video/*, source/course, etc.
+# Or use tag lookup per type:
+obsidian tag name="source/book" verbose          # all book files → cross-reference with completed set
+obsidian tag name="source/course" verbose        # all course files
+obsidian tag name="source/podcast" verbose       # all podcast files
+```
 
 ### Source categories
-Grep `category:` frontmatter field in completed sources. Extract `[[category name]]` values. Count by category. Show top 5.
+```bash
+# Read completed sources from: obsidian search query="[status: 🟩] [end: YYYY]" path=sources
+# Extract category: frontmatter field from each file → count by category, show top 5
+```
 
 ```markdown
 > **Intellectual diet:**
@@ -170,27 +187,30 @@ Write the inference in detected language. Skip if no clear pattern.
 Full year view of project activity and execution rate.
 
 ### Completed this year
-```
-Grep: "status: 🟩" or "status: 📢" in projects/**/*.md
-Filter: "updated:" falls within YYYY
+```bash
+obsidian search query="[status: 🟩]" path=projects
+obsidian search query="[status: 📢]" path=projects
+# Filter: keep only files where updated: frontmatter falls within YYYY
 ```
 
 ### Frozen this year
-```
-Grep: "status: ❄️" in projects/**/*.md
-Filter: "updated:" falls within YYYY
+```bash
+obsidian search query="[status: ❄]" path=projects
+# Filter: keep only files where updated: frontmatter falls within YYYY
 ```
 
 ### Started this year
-```
-Grep: "status: 🟦" or "status: 🟥" in projects/**/*.md
-Filter: "created:" falls within YYYY
+```bash
+obsidian search query="[status: 🟦]" path=projects
+obsidian search query="[status: 🟥]" path=projects
+# Filter: keep only files where created: frontmatter falls within YYYY
 ```
 
 ### Multi-year drag
-```
-Grep: "status: 🟦" or "status: 🟥" in projects/**/*.md
-Filter: "created:" falls in YYYY-1 or earlier (still active from previous years)
+```bash
+obsidian search query="[status: 🟦]" path=projects
+obsidian search query="[status: 🟥]" path=projects
+# Filter: keep only files where created: predates YYYY (from previous years)
 ```
 
 **Completion rate** = completed / (completed + frozen + multi-year drag) × 100%

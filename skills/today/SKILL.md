@@ -73,7 +73,7 @@ User: "today" / "start my day" / "kick me" / "feed" / "briefing"
    b. Find active projects (status 🟥 or 🟦), read their content
    c. Read 5-10 recently modified vault notes (base/, sources/)
    d. Find 2-3 old notes (30+ days) connected to recent themes
-   e. Grep for open tasks and stated intentions in recent entries
+   e. Search for open tasks and stated intentions in recent entries (obsidian search)
    f. Read current week's weekly note (periodic/weekly/YYYY-WWW.md) if it exists —
       specifically text BELOW the [!weekly-review]- callout (user's stated weekly focus).
       This tells you what the user committed to this week. Use it to align the seed
@@ -98,8 +98,8 @@ and move them to today's note. This is the GTD "process inbox" step — automate
 ### Process
 
 1. **Find inbox tasks:**
-```
-Grep: "#task/inbox" in periodic/daily/*.md -> files with inbox tasks
+```bash
+obsidian search:context query="task-todo:#task/inbox" path=periodic/daily  # open inbox tasks only
 ```
 
 2. **Filter:**

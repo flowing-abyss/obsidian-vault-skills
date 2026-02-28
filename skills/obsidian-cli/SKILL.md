@@ -200,6 +200,38 @@ obsidian recents
 obsidian property:set name="addition" value="[[My Addition|➕]]" type=list file="Parent Note"
 ```
 
+
+### Counting notes/tasks/sources by date (replaces: Grep "YYYY-MM-" in frontmatter)
+```bash
+# Notes created this month (works as partial date match in [property: value] syntax):
+obsidian search query="[created: 2026-02]" path=base/notes total
+obsidian search query="[created: 2026-02]" path=base/additions total
+
+# Multiple property filters combined with space (AND logic):
+obsidian search query="[status: 🟩] [end: 2026-02]" path=sources total
+
+# Tasks completed this month (text search for ✅ date marker):
+obsidian search query="✅ 2026-02" total
+
+# Projects by status (replaces: Grep "status: 🟦" in projects/):
+obsidian search query="[status: 🟦]" path=projects
+obsidian search query="[status: 🟥]" path=projects
+obsidian search query="[status: 🟩]" path=projects
+```
+
+**IMPORTANT:** `[property: value]` syntax supports partial matching:
+- `[created: 2026-02]` — finds all files with `created:` starting with `2026-02`
+- `[status: 🟩] [end: 2026]` — two property conditions combined (space = AND)
+- `property: value` (without brackets) → **error** "Operator not recognized"
+- `#tag [property: value]` combined → **returns 0** (not supported)
+
+### Getting files by tag (replaces: Grep "#source/book" in sources/)
+```bash
+obsidian tag name="source/book" verbose      # all files with this tag + count
+obsidian tag name="source/article/paper" verbose
+obsidian tags sort=count counts              # all vault tags sorted by frequency
+```
+
 ## Plugin Development
 
 After making code changes to a plugin or theme, follow this workflow:

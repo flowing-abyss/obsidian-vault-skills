@@ -62,9 +62,9 @@ User: "weekly review" / "итоги недели" / "недельный обзо
    not task lines, not pure wikilinks — what the user actually wrote themselves)
     |
 5. Gather IN PARALLEL:
-   a. Completed tasks — grep ✅ pattern across entire vault
+   a. Completed tasks — CLI: obsidian tasks done / obsidian search query="✅ YYYY-MM"
    b. Themes — count wikilinks across daily notes
-   c. Project progress — read active projects + grep mentions in daily notes
+   c. Project progress — read active projects via obsidian search + mentions in daily notes
    d. Open threads — extract Threads sections from briefing callouts
    e. Journal patterns — aggregate free-text themes from user writing in daily notes
     |
@@ -83,12 +83,8 @@ User: "weekly review" / "итоги недели" / "недельный обзо
 
 **Search entire vault** for tasks completed this week:
 ```bash
-# Via CLI (cross-platform):
-obsidian tasks done format=json          # all done tasks with metadata
-obsidian search query="✅ 2026-02" path=periodic  # scoped to periodic notes
-
-# Via Grep (Claude built-in, also cross-platform):
-Grep: "✅ \d{4}-\d{2}-\d{2}" across all .md files
+obsidian tasks done format=json                    # all done tasks with metadata
+obsidian search query="✅ YYYY-MM" path=periodic  # count by month (scoped to periodic notes)
 ```
 Filter: keep only lines where ✅ date falls within Mon–Sun of current week
 
@@ -158,8 +154,8 @@ Do not quote raw journal text. Only summarize the pattern.
 
 ## Project Progress
 
-1. Grep `status: 🟦` or `status: 🟥` in `projects/**/*.md` → list active projects
-2. For each project, grep its title in the 7 daily notes
+1. `obsidian search query="[status: 🟦]" path=projects` and `obsidian search query="[status: 🟥]" path=projects` → list active projects
+2. For each project, search its title in the 7 daily notes via `obsidian search:context query="[[Project Name]]" path=periodic/daily`
 3. Extract: decisions made, blockers, progress, next steps from those mentions
 4. Write as narrative: status emoji + 1 sentence of what happened this week
 

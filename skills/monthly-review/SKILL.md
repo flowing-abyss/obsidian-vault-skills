@@ -75,27 +75,23 @@ User: "monthly review" / "итоги месяца" / "месячный обзо�
 Count activity created or completed during YYYY-MM.
 
 ### Notes created
+```bash
+obsidian search query="[created: YYYY-MM]" path=base/notes total    # notes in base/notes
+obsidian search query="[created: YYYY-MM]" path=base/additions total  # notes in additions
 ```
-Grep: "created: YYYY-MM-" in base/notes/**/*.md
-Count matching files
-```
-Also count from `base/additions/` with same pattern.
 
 *Notes created = new ideas that made it into the knowledge base this month — the output side of the system.*
 
 ### Tasks closed
-```
-Grep: "✅ YYYY-MM-\d{2}" across all .md files
-Count unique matching lines
+```bash
+obsidian search query="✅ YYYY-MM" total  # count lines with completion marker for this month
 ```
 
 *Tasks closed = completed actions tracked in the GTD system. Not emails, not informal to-dos — only tasks in the vault.*
 
 ### Sources processed
-```
-Grep: "end: YYYY-MM-" in sources/**/*.md
-Filter: only files where status contains 🟩
-Count matching files
+```bash
+obsidian search query="[status: 🟩] [end: YYYY-MM]" path=sources total
 ```
 
 *Sources processed = books, articles, videos, courses, etc. marked as finished (status: 🟩 + end date set). These are inputs to the system.*
@@ -202,15 +198,16 @@ If nothing stale in active areas — skip section silently.
 Find projects that may be stuck or neglected.
 
 ### Stuck projects
-```
-Grep: "status: 🟦" or "status: 🟥" in projects/**/*.md
-Filter: files where "updated:" frontmatter date is 14+ days before today
+```bash
+obsidian search query="[status: 🟦]" path=projects  # in-progress projects
+obsidian search query="[status: 🟥]" path=projects  # planned projects
+# Then filter by updated: frontmatter date — keep only those 14+ days before today
 ```
 
 For each stuck project: show name, status, and how many days since last update.
 
 ### Dormant projects
-Projects with `status: 🟥` (planned) that have `created:` older than 30 days and no recent mentions in daily or weekly notes.
+Projects with `status: 🟥` (planned) that have `created:` older than 30 days and no recent mentions in daily or weekly notes. Use `obsidian search query="[status: 🟥]" path=projects` then filter by `created:` date.
 
 ```markdown
 > **Project health:**
