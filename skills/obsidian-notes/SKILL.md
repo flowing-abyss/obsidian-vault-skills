@@ -47,7 +47,9 @@ Before assigning a category tag, discover existing categories:
 
 ### Workflow
 
-1. **Use Glob** to list available categories: `base/categories/*.md`
+1. **Discover existing categories** — use either:
+   - `obsidian files folder=base/categories ext=md` (CLI, cross-platform)
+   - Glob pattern: `base/categories/*.md` (Claude built-in Glob tool)
 2. **Match by relevance** — choose the most appropriate existing category for the note's topic
 3. **If no match exists** — omit the category tag or ask user; NEVER invent categories
 4. **Category tag format** — `category/<folder_name>` where `<folder_name>` matches the category note filename (without `.md`)

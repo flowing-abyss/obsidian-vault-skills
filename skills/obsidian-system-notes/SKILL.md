@@ -60,7 +60,9 @@ Before creating any system note, discover existing notes dynamically:
 | `problem` | `base/_problems/` | `base/_problems/*.md` |
 
 **Workflow:**
-1. **Use Glob** to list available notes in the relevant directories
+1. **Discover existing notes** — use either:
+   - `obsidian files folder=base/categories ext=md` / `obsidian files folder=base/_meta-notes ext=md` / `obsidian files folder=base/_problems ext=md` (CLI, cross-platform)
+   - Glob patterns from the table above (Claude built-in Glob tool)
 2. **Match by relevance** — choose the most appropriate existing note
 3. **If no match exists** — leave the field empty or ask the user; NEVER invent links
 4. **Constraint:** Problem must use the same category as its parent meta-note

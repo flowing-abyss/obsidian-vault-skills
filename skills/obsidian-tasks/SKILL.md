@@ -43,7 +43,9 @@ Before creating tasks, dynamically discover existing categories:
 
 ### Workflow
 
-1. **Use Glob** to list available categories: `base/categories/*.md`
+1. **Discover existing categories** — use either:
+   - `obsidian files folder=base/categories ext=md` (CLI, cross-platform)
+   - Glob pattern: `base/categories/*.md` (Claude built-in Glob tool)
 2. **Extract category tag** from filename (e.g., `artificial_intelligence.md` → `#category/artificial_intelligence`)
 3. **Match by relevance** — choose the most appropriate existing category based on task context
 4. **If no match exists** — omit category tag or ask user; NEVER invent categories

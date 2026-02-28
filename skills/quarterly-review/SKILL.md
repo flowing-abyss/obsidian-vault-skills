@@ -17,17 +17,10 @@ Apply to ALL section headers, metric labels, table column names, inference lines
 
 **Path:** `periodic/quarterly/YYYY-QN.md`
 
-**Compute quarter months and parent year:**
+**Compute quarter months and parent year** (cross-platform, using `obsidian eval`):
 ```bash
-python3 -c "
-from datetime import date
-d = date.today()
-q = (d.month - 1) // 3 + 1
-m1 = (q - 1) * 3 + 1
-months = [f'{d.year}-{str(m1+i).zfill(2)}' for i in range(3)]
-print(f'{d.year}-Q{q}', *months)
-"
-# example output: 2026-Q1  2026-01  2026-02  2026-03
+obsidian eval code="const d=new Date();const q=Math.ceil((d.getMonth()+1)/3);const m1=(q-1)*3+1;const months=[0,1,2].map(i=>d.getFullYear()+'-'+String(m1+i).padStart(2,'0'));d.getFullYear()+'-Q'+q+' '+months.join(' ')"
+# example output: 2026-Q1 2026-01 2026-02 2026-03
 ```
 
 **Frontmatter (exact from template):**

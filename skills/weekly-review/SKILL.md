@@ -17,10 +17,13 @@ Apply to ALL section headers, metric labels, inference lines (→), and particip
 
 **Path:** `periodic/weekly/YYYY-WWW.md`
 
-**Compute week and parent month:**
+**Compute week and parent month** (cross-platform, using `obsidian eval`):
 ```bash
-date +%G-W%V                                                        # current week e.g. 2026-W08
-date -j -f "%Y-%m-%d" "$(date -v-mon +%Y-%m-%d)" "+%Y-%m"          # parent month e.g. 2026-02
+# Current ISO 8601 week e.g. 2026-W08
+obsidian eval code="(function(){const d=new Date();const dt=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=dt.getUTCDay()||7;dt.setUTCDate(dt.getUTCDate()+4-day);const y=dt.getUTCFullYear();const ys=new Date(Date.UTC(y,0,1));const w=Math.ceil(((dt-ys)/86400000+1)/7);return y+'-W'+String(w).padStart(2,'0')})()"
+
+# Parent month e.g. 2026-02
+obsidian eval code="const d=new Date();d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')"
 ```
 
 **Frontmatter (exact from template):**
@@ -79,10 +82,15 @@ User: "weekly review" / "итоги недели" / "недельный обзо
 ## Completed Tasks
 
 **Search entire vault** for tasks completed this week:
-```
+```bash
+# Via CLI (cross-platform):
+obsidian tasks done format=json          # all done tasks with metadata
+obsidian search query="✅ 2026-02" path=periodic  # scoped to periodic notes
+
+# Via Grep (Claude built-in, also cross-platform):
 Grep: "✅ \d{4}-\d{2}-\d{2}" across all .md files
-Filter: keep only lines where ✅ date falls within Mon–Sun of current week
 ```
+Filter: keep only lines where ✅ date falls within Mon–Sun of current week
 
 Extract human-readable task text: strip `- [x]`, `#task/*`, `#category/*`, `#priority/*`, and all emoji date markers (`📅`, `⏰`, `✅ YYYY-MM-DD`). Keep only the description.
 

@@ -42,10 +42,13 @@ cssclasses:
 ---
 ```
 
-**Week computation:** ISO 8601 week number. Compute via bash:
+**Week computation:** ISO 8601 week number. Use `obsidian eval` (cross-platform):
 ```bash
-date +%G-W%V          # today
-date -j -f "%Y-%m-%d" "2026-02-10" "+%G-W%V"  # specific date (macOS)
+# Current week
+obsidian eval code="(function(){const d=new Date();const dt=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=dt.getUTCDay()||7;dt.setUTCDate(dt.getUTCDate()+4-day);const y=dt.getUTCFullYear();const ys=new Date(Date.UTC(y,0,1));const w=Math.ceil(((dt-ys)/86400000+1)/7);return y+'-W'+String(w).padStart(2,'0')})()"
+
+# Specific date (e.g. 2026-02-10)
+obsidian eval code="(function(){const d=new Date('2026-02-10');const dt=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=dt.getUTCDay()||7;dt.setUTCDate(dt.getUTCDate()+4-day);const y=dt.getUTCFullYear();const ys=new Date(Date.UTC(y,0,1));const w=Math.ceil(((dt-ys)/86400000+1)/7);return y+'-W'+String(w).padStart(2,'0')})()"
 ```
 
 ## Execution Flow
@@ -151,22 +154,24 @@ Each line gets `> ` prefix to stay inside the callout.
 
 ## Context Gathering
 
-Use built-in tools (Glob, Read, Grep) directly. Gather broadly — the more
+Use `obsidian` CLI and built-in tools (Glob, Read, Grep) directly. Gather broadly — the more
 context, the better the briefing.
 
 ### Recent daily notes
+```bash
+obsidian files folder=periodic/daily ext=md   # list all daily notes
 ```
-Glob: periodic/daily/YYYY-MM-*.md
-```
-Read the most recent 3-5 entries. Extract:
+Read the most recent 3-5 entries (newest by name, since names are YYYY-MM-DD). Extract:
 - Unfinished thoughts, trailing sentences
 - Recurring themes across entries
 - Stated intentions ("need to", "want to", "planning to")
 - What the user was thinking about / working on
 
 ### Active projects
-```
-Grep: "status: 🟦" OR "status: 🟥" in projects/**/*.md
+```bash
+# Via CLI search — use [property: value] syntax for frontmatter:
+obsidian search query="[status: 🟦]" path=projects
+obsidian search query="[status: 🟥]" path=projects
 ```
 For each active project:
 1. Read the project index file (the one with `status:` in frontmatter)
@@ -175,6 +180,10 @@ For each active project:
 4. Collect all wikilinks already present -> KNOWN connections (skip these)
 
 ### Recent vault activity
+```bash
+obsidian recents   # recently opened files (cross-platform, replaces Glob sort by mtime)
+```
+Also use Glob for broader scoping:
 ```
 Glob: base/notes/**/*.md   -> 5-10 newest by modification time
 Glob: sources/**/*.md      -> 3-5 newest by modification time
@@ -188,9 +197,10 @@ Find notes 30+ days old whose topics intersect with recent daily themes or activ
 ```
 
 ### Open threads
-```
-Grep: "- \[ \]" in recent daily notes      -> incomplete tasks
-Grep: "need to|want to|planning to|should|must|going to"   -> stated intentions
+```bash
+# Open tasks in daily notes — use task-todo:/task-done: operators:
+obsidian search:context query="task-todo:#task/inbox" path=periodic/daily   # open inbox tasks only
+obsidian search query="- [ ]" path=periodic/daily                          # any open task (no tag)
 ```
 
 ## Briefing Structure

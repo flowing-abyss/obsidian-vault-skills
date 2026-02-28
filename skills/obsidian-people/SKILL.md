@@ -47,7 +47,9 @@ Before creating a people note, dynamically discover existing system notes:
 
 ### Workflow
 
-1. **Use Glob** to list available notes in each directory
+1. **Discover existing notes** — use either:
+   - `obsidian files folder=base/categories ext=md` / `obsidian files folder=base/_meta-notes ext=md` (CLI, cross-platform)
+   - Glob patterns from the table above (Claude built-in Glob tool)
 2. **Match by relevance** — choose the most appropriate existing note based on the person's domain/field
 3. **If no match exists** — leave the field empty or ask user; NEVER create system notes
 4. **Categories are human-only** — agent never creates categories

@@ -17,9 +17,9 @@ Apply to ALL section headers, metric labels, inference lines (→), and particip
 
 **Path:** `periodic/monthly/YYYY-MM.md`
 
-**Compute parent quarter (macOS):**
+**Compute parent quarter** (cross-platform, using `obsidian eval`):
 ```bash
-python3 -c "y,m='2026-02'.split('-'); q=(int(m)-1)//3+1; print(f'{y}-Q{q}')"
+obsidian eval code="const d=new Date();const q=Math.ceil((d.getMonth()+1)/3);d.getFullYear()+'-Q'+q"
 # output: 2026-Q1
 ```
 
