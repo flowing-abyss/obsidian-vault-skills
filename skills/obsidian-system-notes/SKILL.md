@@ -33,7 +33,7 @@ Category → Meta-note → Problem → Hierarchy
 ```
 User wants a system note →
   └─ "organize a knowledge area / thematic hub" → Meta-note
-  └─ "specific question / research problem" → Problem
+  └─ "research sub-problem / decomposed challenge within a meta-note" → Problem
   └─ "aggregate / group notes under a topic" → Hierarchy
 ```
 
@@ -94,14 +94,6 @@ updated: 2025-08-10T23:25:33+07:00
 - **relevant**: `false` by default; user sets to `true` when actively working in this area
 - **aliases**: empty by default
 
-### Body
-
-New meta-notes start with the stub marker `💤`. When creating, place it as the first line of body content:
-
-```markdown
-💤
-```
-
 ### Example
 
 Filename: `base/_meta-notes/machine learning.md`
@@ -117,15 +109,13 @@ relevant: false
 created: 2025-08-10T23:25:33+07:00
 updated: 2025-08-10T23:25:33+07:00
 ---
-
-💤
 ```
 
 ---
 
 ## Problem
 
-A specific research question anchored to a meta-note. Inherits the same category.
+A decomposed sub-problem of the meta-note's research — a tractable component of a larger research challenge, not a "how-to". Inherits the same category.
 
 ### Frontmatter Template
 
@@ -150,12 +140,6 @@ updated: 2025-08-10T23:25:33+07:00
 - **meta**: Link to the parent meta-note — required
 - **relevant**: `false` by default
 
-### Body
-
-```markdown
-💤
-```
-
 ### Example
 
 Filename: `base/_problems/overfitting in neural networks.md`
@@ -173,8 +157,6 @@ relevant: false
 created: 2025-08-10T23:25:33+07:00
 updated: 2025-08-10T23:25:33+07:00
 ---
-
-💤
 ```
 
 ---
@@ -217,12 +199,6 @@ updated: 2025-08-10T23:25:33+07:00
 | Meta-note | Yes | — |
 | Problem | Yes (same meta) | Yes |
 
-### Body
-
-```markdown
-💤
-```
-
 ### Example
 
 Filename: `base/_hierarchy/regularization techniques.md`
@@ -242,6 +218,4 @@ relevant: false
 created: 2025-08-10T23:25:33+07:00
 updated: 2025-08-10T23:25:33+07:00
 ---
-
-💤
 ```

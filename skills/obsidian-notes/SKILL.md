@@ -71,7 +71,7 @@ updated: 2025-08-10T23:25:33+07:00
 
 - **Date format:** ISO 8601 with timezone offset (`YYYY-MM-DDTHH:mm:ssZ`)
 - **Required tag:** One of the note type tags (see below)
-- **Optional tag:** `category/<name>` — only if category exists
+- **Optional tag:** `category/<name>` — only if category exists (replace spaces with `_` in category name)
 
 ### Tag Taxonomy
 
