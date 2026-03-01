@@ -207,28 +207,28 @@ What happened to projects during the quarter.
 
 ### Completed
 ```bash
-obsidian search query="[status: 🟩]" path=projects
-obsidian search query="[status: 📢]" path=projects
+obsidian search query="tag:#project [status: 🟩]"
+obsidian search query="tag:#project [status: 📢]"
 # Filter: keep only files where updated: frontmatter falls within the quarter
 ```
 
 ### Frozen this quarter
 ```bash
-obsidian search query="[status: ❄]" path=projects
+obsidian search query="tag:#project [status: ❄]"
 # Filter: keep only files where updated: frontmatter falls within the quarter
 ```
 
 ### Started this quarter
 ```bash
-obsidian search query="[status: 🟦]" path=projects
-obsidian search query="[status: 🟥]" path=projects
+obsidian search query="tag:#project [status: 🟦]"   # in progress
+obsidian search query="tag:#project [status: 🟥]"   # todo
 # Filter: keep only files where created: frontmatter falls within the quarter
 ```
 
 ### Still stuck (carried from previous quarter)
 ```bash
-obsidian search query="[status: 🟦]" path=projects
-obsidian search query="[status: 🟥]" path=projects
+obsidian search query="tag:#project [status: 🟦]"   # in progress
+obsidian search query="tag:#project [status: 🟥]"   # todo
 # Filter: created: predates the quarter start AND updated: is 30+ days before today
 ```
 

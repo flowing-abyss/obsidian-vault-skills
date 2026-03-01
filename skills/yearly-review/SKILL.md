@@ -217,28 +217,28 @@ Full year view of project activity and execution rate.
 
 ### Completed this year
 ```bash
-obsidian search query="[status: 🟩]" path=projects
-obsidian search query="[status: 📢]" path=projects
+obsidian search query="tag:#project [status: 🟩]"
+obsidian search query="tag:#project [status: 📢]"
 # Filter: keep only files where updated: frontmatter falls within YYYY
 ```
 
 ### Frozen this year
 ```bash
-obsidian search query="[status: ❄]" path=projects
+obsidian search query="tag:#project [status: ❄]"
 # Filter: keep only files where updated: frontmatter falls within YYYY
 ```
 
 ### Started this year
 ```bash
-obsidian search query="[status: 🟦]" path=projects
-obsidian search query="[status: 🟥]" path=projects
+obsidian search query="tag:#project [status: 🟦]"   # in progress
+obsidian search query="tag:#project [status: 🟥]"   # todo
 # Filter: keep only files where created: frontmatter falls within YYYY
 ```
 
 ### Multi-year drag
 ```bash
-obsidian search query="[status: 🟦]" path=projects
-obsidian search query="[status: 🟥]" path=projects
+obsidian search query="tag:#project [status: 🟦]"   # in progress
+obsidian search query="tag:#project [status: 🟥]"   # todo
 # Filter: keep only files where created: predates YYYY (from previous years)
 ```
 

@@ -154,7 +154,7 @@ Do not quote raw journal text. Only summarize the pattern.
 
 ## Project Progress
 
-1. `obsidian search query="[status: 🟦]" path=projects` and `obsidian search query="[status: 🟥]" path=projects` → list active projects
+1. `obsidian search query="tag:#project [status: 🟦]"` and `obsidian search query="tag:#project [status: 🟥]"` → list active projects
 2. For each project, search its title in the 7 daily notes via `obsidian search:context query="[[Project Name]]" path=periodic/daily`
 3. Extract: decisions made, blockers, progress, next steps from those mentions
 4. Write as narrative: status emoji + 1 sentence of what happened this week

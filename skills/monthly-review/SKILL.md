@@ -199,15 +199,15 @@ Find projects that may be stuck or neglected.
 
 ### Stuck projects
 ```bash
-obsidian search query="[status: 🟦]" path=projects  # in-progress projects
-obsidian search query="[status: 🟥]" path=projects  # planned projects
+obsidian search query="tag:#project [status: 🟦]"   # in progress
+obsidian search query="tag:#project [status: 🟥]"   # todo
 # Then filter by updated: frontmatter date — keep only those 14+ days before today
 ```
 
 For each stuck project: show name, status, and how many days since last update.
 
 ### Dormant projects
-Projects with `status: 🟥` (planned) that have `created:` older than 30 days and no recent mentions in daily or weekly notes. Use `obsidian search query="[status: 🟥]" path=projects` then filter by `created:` date.
+Projects with `status: 🟥` (todo) that have `created:` older than 30 days and no recent mentions in daily or weekly notes. Use `obsidian search query="tag:#project [status: 🟥]"` then filter by `created:` date.
 
 ```markdown
 > **Project health:**

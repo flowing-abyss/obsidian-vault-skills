@@ -169,9 +169,9 @@ Read the most recent 3-5 entries (newest by name, since names are YYYY-MM-DD). E
 
 ### Active projects
 ```bash
-# Via CLI search — use [property: value] syntax for frontmatter:
-obsidian search query="[status: 🟦]" path=projects
-obsidian search query="[status: 🟥]" path=projects
+# tag: operator + [property: value] works; bare #tag + [property: value] returns 0
+obsidian search query="tag:#project [status: 🟦]"   # in progress
+obsidian search query="tag:#project [status: 🟥]"   # todo
 ```
 For each active project:
 1. Read the project index file (the one with `status:` in frontmatter)
