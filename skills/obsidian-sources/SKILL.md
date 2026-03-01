@@ -33,7 +33,7 @@ production:
 ### Required Fields
 
 - **tags**: Source-specific tags (see Available Tags section)
-- **status**: ⬛ (abandoned), 🟥 (planned), 🟦 (in progress), ⚛️ (atomizing), 🟩 (completed)
+- **status**: ⬛ (abandoned), 🟥 (todo), 🟦 (in progress), ⚛️ (atomizing), 🟩 (completed)
 - **created/updated**: ISO 8601 with timezone
 - **start**: When started consuming the source
 
@@ -73,7 +73,7 @@ Before creating a source note, dynamically discover existing system notes:
 ## Status Values
 
 - ⬛ — Abandoned
-- 🟥 — Planned
+- 🟥 — Todo
 - 🟦 — In progress
 - ⚛️ — Atomizing (being broken down into independent atomic notes)
 - 🟩 — Completed

@@ -51,7 +51,7 @@ url:
 
 ## Frontmatter Fields
 
-- **status**: ⬛ (abandoned), 🟥 (planned), 🟦 (in progress), 🟩 (completed, not published), 📢 (published)
+- **status**: ⬛ (abandoned), 🟥 (todo), 🟦 (in progress), 🟩 (completed, not published), 📢 (published)
 - **priority**: 🇦 (critical & urgent), 🇧 (important, not urgent), 🇨 (normal), 🇩 (delegated), 🇪 (review or delete)
 - **dates**: ISO 8601 format with timezone
 - **category/meta/problem**: optional hierarchy links (see Linking Rules below)
