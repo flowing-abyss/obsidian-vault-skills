@@ -9,24 +9,6 @@ Use the `obsidian` CLI to interact with a running Obsidian instance. Requires Ob
 
 **REQUIRES:** Obsidian 1.12+ with CLI enabled: Settings → General → Command line interface.
 
-## PATH Setup
-
-On macOS, Obsidian adds itself to `.zprofile` when you enable the CLI:
-```bash
-export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
-```
-
-In Claude Code Bash tool sessions (non-login shell), source it explicitly or use the full path:
-```bash
-# Option A: set PATH inline
-export PATH="/Applications/Obsidian.app/Contents/MacOS:$PATH" && obsidian <command>
-
-# Option B: full path
-/Applications/Obsidian.app/Contents/MacOS/Obsidian <command>
-```
-
-For brevity, all examples below assume `obsidian` is in PATH.
-
 ## Syntax
 
 **Parameters** take a value with `=`. Quote values with spaces:
