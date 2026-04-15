@@ -201,7 +201,7 @@ def _longform_block(title: str) -> list[str]:
         "  workflow: Default Workflow",
         "  sceneFolder: /",
         "  scenes: []",
-        "  sceneTemplate: templates/create/projects/longform scene template.md",
+        "  sceneTemplate: templates/create/projects/longform/scene template.md",
         "  ignoredFiles: []",
     ]
 
