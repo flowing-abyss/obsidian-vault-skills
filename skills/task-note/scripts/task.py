@@ -298,8 +298,11 @@ def _build_frontmatter(args, task_id: str, now: str) -> str:
     lines += ["tags:", f"  - {normalize_frontmatter_scalar(args.tag)}"]
     lines += ["aliases: []"]
     lines += [f"id: {task_id}"]
-    lines += _list_block("attribute", args.attribute, as_links=False, quote_plain=True)
-    lines += [f"description: {fmt_yaml_string(normalize_frontmatter_scalar(args.description) or '')}"]
+    _attr = (args.attribute or [""])[0]
+    _attr_out = normalize_frontmatter_scalar(_attr) or ""
+    lines += [f"attribute: {_attr_out}" if _attr_out else "attribute:"]
+    _desc = normalize_frontmatter_scalar(args.description) or ""
+    lines += [f"description: {fmt_yaml_string(_desc)}"]
     lines += [f"project:", f"  - {fmt_link(args.project)}"]
     lines += _list_block("milestone", args.milestone)
     lines += [f"status: {normalize_frontmatter_scalar(args.status)}"]
@@ -457,9 +460,11 @@ def _patch_frontmatter(fm: str, args, now: str) -> str:
     if args.priority is not None:
         fm = _set_scalar(fm, "priority", args.priority)
     if args.attribute is not None:
-        fm = _set_list(fm, "attribute", args.attribute, as_links=False, quote_plain=True)
+        _attr = (args.attribute or [""])[0]
+        fm = _set_scalar(fm, "attribute", normalize_frontmatter_scalar(_attr) or "")
     if args.description is not None:
-        fm = _set_scalar(fm, "description", fmt_yaml_string(normalize_frontmatter_scalar(args.description) or ""))
+        _desc = normalize_frontmatter_scalar(args.description) or ""
+        fm = _set_scalar(fm, "description", fmt_yaml_string(_desc))
     if args.milestone is not None:
         fm = _set_list(fm, "milestone", args.milestone)
     if args.related is not None:
