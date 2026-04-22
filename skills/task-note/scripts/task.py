@@ -58,6 +58,33 @@ from validators import (
 
 
 # ---------------------------------------------------------------------------
+# Description helpers
+# ---------------------------------------------------------------------------
+
+
+def _clean_description(raw: str | None) -> str:
+    """Return a single clean line suitable for a YAML description scalar.
+
+    Handles literal backslash-n sequences (from CSV exports / copy-paste)
+    as well as actual newline characters, markdown escapes, etc.
+    """
+    if not raw:
+        return ""
+    s = str(raw)
+    # Collapse doubled backslash-n first (\\n → space), then single (\n → space)
+    s = s.replace("\\\\n", " ").replace("\\n", " ")
+    s = s.replace("\\\\r", "").replace("\\r", "")
+    s = s.replace("\\\\t", " ").replace("\\t", " ")
+    # Strip markdown escapes that leak into descriptions
+    s = s.replace("\\*", "*").replace("\\[", "[").replace("\\]", "]")
+    # Flatten actual newlines
+    s = " ".join(part.strip() for part in s.splitlines() if part.strip())
+    # Collapse multiple spaces
+    s = re.sub(r" {2,}", " ", s)
+    return s.strip()
+
+
+# ---------------------------------------------------------------------------
 # Task ID helpers
 # ---------------------------------------------------------------------------
 
@@ -301,8 +328,7 @@ def _build_frontmatter(args, task_id: str, now: str) -> str:
     _attr = (args.attribute or [""])[0]
     _attr_out = normalize_frontmatter_scalar(_attr) or ""
     lines += [f"attribute: {_attr_out}" if _attr_out else "attribute:"]
-    _desc = normalize_frontmatter_scalar(args.description) or ""
-    lines += [f"description: {fmt_yaml_string(_desc)}"]
+    lines += [f"description: {fmt_yaml_string(_clean_description(args.description))}"]
     lines += [f"project:", f"  - {fmt_link(args.project)}"]
     lines += _list_block("milestone", args.milestone)
     lines += [f"status: {normalize_frontmatter_scalar(args.status)}"]
@@ -463,8 +489,7 @@ def _patch_frontmatter(fm: str, args, now: str) -> str:
         _attr = (args.attribute or [""])[0]
         fm = _set_scalar(fm, "attribute", normalize_frontmatter_scalar(_attr) or "")
     if args.description is not None:
-        _desc = normalize_frontmatter_scalar(args.description) or ""
-        fm = _set_scalar(fm, "description", fmt_yaml_string(_desc))
+        fm = _set_scalar(fm, "description", fmt_yaml_string(_clean_description(args.description)))
     if args.milestone is not None:
         fm = _set_list(fm, "milestone", args.milestone)
     if args.related is not None:
