@@ -144,7 +144,7 @@ def resolve_link(raw: str, vault_root: Path) -> Path | None:
     if len(matches) == 1:
         return matches[0]
     # Prefer a match whose relative path contains the original raw hint
-    hint = raw.strip().strip('"').lstrip("[[").rstrip("]]")
+    hint = raw.strip().strip('"').strip("'").lstrip("[[").rstrip("]]")
     for m in matches:
         if hint in str(m.relative_to(vault_root)):
             return m
@@ -187,7 +187,7 @@ def update_fm_field(content: str, key: str, value) -> str:
 def read_fm_field(content: str, key: str) -> str | None:
     """Read the value of a scalar frontmatter field."""
     m = re.search(rf"^{re.escape(key)}:[ \t]*(.*)$", content, re.MULTILINE)
-    return m.group(1).strip() if m else None
+    return m.group(1).strip().strip('"').strip("'") if m else None
 
 
 def read_fm_list(content: str, key: str) -> list[str]:
@@ -210,7 +210,7 @@ def read_fm_list(content: str, key: str) -> list[str]:
             continue
         if not stripped.startswith("- "):
             break  # next frontmatter key — stop
-        raw = stripped[2:].strip().strip('"')
+        raw = stripped[2:].strip().strip('"').strip("'")
         # Extract name from [[wikilink]] if present
         wm = re.match(r"\[\[([^\]|]+)(?:\|[^\]]+)?\]\]", raw)
         name = wm.group(1).split("/")[-1].removesuffix(".md") if wm else raw
