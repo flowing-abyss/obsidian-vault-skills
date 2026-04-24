@@ -75,12 +75,12 @@ updated: 2025-08-10T23:25:33+07:00
 
 ### Tag Taxonomy
 
-| Tag | Use case |
-|-----|----------|
-| `note/basic/primary` | Default for general knowledge notes |
-| `note/specific/code` | Code snippets, programming patterns |
-| `note/specific/exact` | Definitions, terms, precise concepts |
-| `category/<name>` | Assign to existing category (validate first!) |
+Fetch current valid note type tags from manifests:
+```bash
+obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/notes')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
+```
+
+Additionally: `category/<name>` — assign to existing category (validate first!).
 
 ## Content Principles
 

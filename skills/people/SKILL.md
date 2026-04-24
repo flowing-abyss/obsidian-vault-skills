@@ -53,38 +53,18 @@ Recommendation: request names only if the creation script returned an error or t
 
 ## Contact Tags
 
-- `contact/working`
-- `contact/client`
-- `contact/personal`
-- `contact/routine`
+```bash
+obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/contacts')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
+```
 
 ## Creator Tags
 
-- `creator/writer`
-- `creator/director`
-- `creator/researcher`
-- `creator/contentmaker`
-- `creator/businessman`
-- `creator/expert`
-- `creator/musician`
-- `creator/composer`
-- `creator/actor`
-- `creator/painter`
-- `creator/photographer`
-- `creator/cinematographer`
+```bash
+obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/creators')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
+```
 
 ## Production Tags
 
-- `production/channel`
-- `production/podcast`
-- `production/film_studio`
-- `production/art_studio`
-- `production/game_studio`
-- `production/label`
-- `production/band`
-- `production/organization`
-- `production/company`
-- `production/platform`
-- `production/website`
-- `production/publisher`
-- `production/journal`
+```bash
+obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/productions')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
+```

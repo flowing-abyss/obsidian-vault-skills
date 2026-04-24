@@ -77,16 +77,7 @@ Recommendation: request names only if the creation script returned an error or t
 
 ## Tags
 
-- `source/article/paper`
-- `source/article/resource`
-- `source/book`
-- `source/course`
-- `source/cinematic/movie`
-- `source/cinematic/series`
-- `source/cinematic/anime`
-- `source/podcast`
-- `source/video/recording`
-- `source/video/playlist`
-- `source/music/album`
-- `source/music/tracklist`
-- `source/game`
+Fetch current valid tags from manifests:
+```bash
+obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/sources')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
+```
