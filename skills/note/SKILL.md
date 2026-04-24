@@ -1,5 +1,5 @@
 ---
-name: notes
+name: note
 description: 'Create regular knowledge notes in base/notes/. INVOKE whenever user wants to capture or document a concept, topic, or idea. Triggers: "create note", "new note", "note about", "write down", "document this", "запиши", "создай заметку", "новая заметка", "сохрани", "запомни", "заметка про". NOT for projects, sources, people, system notes, or flashcards.'
 ---
 
@@ -14,7 +14,7 @@ Create regular knowledge notes in `base/notes/` — the primary location for kno
 **CRITICAL:** Follow all naming conventions strictly.
 
 | Rule | Description |
-|------|-------------|
+|-|-|
 | **Uniqueness** | Each filename must be unique across the entire vault |
 | **Specificity** | Avoid abstractions; use precise, concrete terms |
 | **Case** | Lowercase only. Exception: proper nouns (e.g., `Zettelkasten`, `Python`) |
@@ -25,7 +25,7 @@ Create regular knowledge notes in `base/notes/` — the primary location for kno
 ### Examples
 
 | Correct | Incorrect | Reason |
-|---------|-----------|--------|
+|-|-|-|
 | `spaced repetition.md` | `Spaced Repetition.md` | Lowercase (not a proper noun) |
 | `Zettelkasten method.md` | `zettelkasten method.md` | Zettelkasten is a proper noun (Luhmann's system) |
 | `Python decorator.md` | `python decorator.md` | Python is a proper noun |
@@ -42,7 +42,7 @@ Create regular knowledge notes in `base/notes/` — the primary location for kno
 Before assigning a category tag, discover existing categories:
 
 | Field | Location | Glob Pattern |
-|-------|----------|--------------|
+|-|-|-|
 | `category` | `base/categories/` | `base/categories/*.md` |
 
 ### Workflow
@@ -109,5 +109,5 @@ Each note should contain one idea and link to related notes, forming a network o
 > [!quote]
 > "A Zettelkasten is a personal tool for thinking and writing that creates an interconnected web of thought." — Sönke Ahrens
 
-[^1]: https://zettelkasten.de/introduction/
+[^1]: [Introduction to the Zettelkasten Method](https://zettelkasten.de/introduction/)
 ```
