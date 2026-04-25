@@ -41,11 +41,11 @@ ONLY the pipelines below are permitted for reading base/tasks.
 ### RETRIEVAL — Single Task (full content)
 
 By ID:
-- Bash: `rg -l '^id:\s*"?<ID>"?\s*$' -g "*.md" base/tasks | xargs -I {} awk 'FNR==1{print "=== " FILENAME " ==="} {print}' "{}"`
+- Bash: `rg -l0 '^id:\s*"?<ID>"?\s*$' -g "*.md" base/tasks | xargs -0 -I {} awk 'FNR==1{print "=== " FILENAME " ==="} {print}' "{}"`
 - Fallback: `obsidian search query='/^id:\s*"?<ID>"?\s*$/'`
 
 By Title:
-- Bash: `rg --files -g "*.md" base/tasks | rg "<Title>" | xargs -I {} awk 'FNR==1{print "=== " FILENAME " ==="} {print}' "{}"`
+- Bash: `rg --files --null -g "*.md" base/tasks | rg -z "<Title>" | xargs -0 -I {} awk 'FNR==1{print "=== " FILENAME " ==="} {print}' "{}"`
 - Fallback: `obsidian search query="file:<Title>" path=base/tasks`
 
 ### DISCOVERY — Multiple Tasks (paths only)
@@ -59,7 +59,7 @@ By Milestone:
 - Fallback: `obsidian search query="[milestone:<Milestone>]" path=base/tasks`
 
 Get project milestones:
-- Bash: `rg -l '  - task/milestone$' -g "*.md" base/tasks | xargs -I {} rg -l "\[\[<Project>.*\]\]" "{}"`
+- Bash: `rg -l0 '  - task/milestone$' -g "*.md" base/tasks | xargs -0 -I {} rg -l "\[\[<Project>.*\]\]" "{}"`
 - Fallback: `obsidian search query="tag:task/milestone [project:<Project>]" path=base/tasks`
 
 By Status:
@@ -71,20 +71,20 @@ By Priority:
 - Fallback: `obsidian search query='[priority:<Priority>]' path=base/tasks`
 
 By Project + Status:
-- Bash: `rg -l "\[\[<Project>.*\]\]" -g "*.md" base/tasks | xargs -I {} rg -l '^status:\s*<Status>\s*$' "{}"`
+- Bash: `rg -l0 "\[\[<Project>.*\]\]" -g "*.md" base/tasks | xargs -0 -I {} rg -l '^status:\s*<Status>\s*$' "{}"`
 - Fallback: `obsidian search query="[project:<Project>] [status:<Status>]" path=base/tasks`
 
 By Project + Priority:
-- Bash: `rg -l "\[\[<Project>.*\]\]" -g "*.md" base/tasks | xargs -I {} rg -l '^priority:\s*<Priority>\s*$' "{}"`
+- Bash: `rg -l0 "\[\[<Project>.*\]\]" -g "*.md" base/tasks | xargs -0 -I {} rg -l '^priority:\s*<Priority>\s*$' "{}"`
 - Fallback: `obsidian search query="[project:<Project>] [priority:<Priority>]" path=base/tasks`
 
 By Project + Status + Priority:
-- Bash: `rg -l "\[\[<Project>.*\]\]" -g "*.md" base/tasks | xargs -I {} rg -l '^status:\s*<Status>\s*$' "{}" | xargs -I {} rg -l '^priority:\s*<Priority>\s*$' "{}"`
+- Bash: `rg -l0 "\[\[<Project>.*\]\]" -g "*.md" base/tasks | xargs -0 -I {} rg -l0 '^status:\s*<Status>\s*$' "{}" | xargs -0 -I {} rg -l '^priority:\s*<Priority>\s*$' "{}"`
 - Fallback: `obsidian search query="[project:<Project>] [status:<Status>] [priority:<Priority>]" path=base/tasks`
 
-**To extract IDs from discovery results**, pipe to:
+**To extract IDs from discovery results**, first change the preceding `rg -l` to `rg -l0`, then pipe to:
 ```bash
-| xargs -I {} rg --no-line-number -o '^id:\s*"?(.+?)"?\s*$' -r '$1' "{}"
+| xargs -0 -I {} rg --no-line-number -o '^id:\s*"?(.+?)"?\s*$' -r '$1' "{}"
 ```
 
 ## CREATE / UPDATE
