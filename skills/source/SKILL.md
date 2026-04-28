@@ -1,5 +1,5 @@
 ---
-name: sources
+name: source
 description: 'Create source tracking notes for books, articles, videos, papers, courses, films, podcasts, and other reference materials. INVOKE when user wants to track any content source. Triggers: "track book", "add source", "new book", "article", "video", "paper", "course", "film", "podcast", "добавь книгу", "запиши источник", "читаю книгу", "смотрю курс", "добавь статью", "добавь видео", "источник". Handles status, ratings, and scientificity levels.'
 ---
 
