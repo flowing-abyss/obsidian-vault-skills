@@ -1,11 +1,11 @@
 ---
 name: diagram
-description: 'Generate Excalidraw diagrams from text content. Three output modes: Obsidian (.md for plugin), Standard (.excalidraw for excalidraw.com), Animated (.excalidraw with animation order). INVOKE when user wants to create a visual diagram. Triggers: "Excalidraw", "draw diagram", "flowchart", "mind map", "visualize", "diagram", "standard excalidraw", "animated excalidraw", "animate", "нарисуй диаграмму", "визуализируй", "создай схему", "майнд мап", "блок-схема".'
+description: 'Generate Obsidian Excalidraw diagrams from text content as vault-native .md files for the Obsidian Excalidraw plugin. INVOKE when user wants to create a visual diagram. Triggers: "Excalidraw", "draw diagram", "flowchart", "mind map", "visualize", "diagram", "нарисуй диаграмму", "визуализируй", "создай схему", "майнд мап", "блок-схема".'
 ---
 
 # Excalidraw Diagram Generator
 
-Create Excalidraw diagrams from text content with multiple output formats.
+Create vault-native Obsidian Excalidraw diagrams from text content.
 
 ---
 
@@ -126,48 +126,43 @@ For complex diagrams, build JSON **one section at a time** — never generate ev
 
 1. **Create base file** with JSON wrapper + first section
 2. **Add one section per edit** — think layout, spacing, cross-section connections
-3. **Use descriptive string IDs** (`"trigger_rect"`, `"arrow_fan_left"`)
+3. **Use stable 8-character element IDs** for Obsidian compatibility (e.g. `"TTitle01"`, `"ArrowA01"`, `"BoxPlan1"`)
 4. **Namespace seeds by section** (section 1 → seeds 100xxx, section 2 → 200xxx)
 5. **After all sections**: review cross-section bindings, balance spacing, fix alignment
 
 ---
 
-## Output Modes
+## Output Mode
 
-Select based on trigger words:
-
-| Trigger Words | Output Mode | File Format | Purpose |
-|---|---|---|---|
-| `Excalidraw`, `draw diagram`, `flowchart`, `mind map` | **Obsidian** (default) | `.md` | Open directly in Obsidian |
-| `standard excalidraw` | **Standard** | `.excalidraw` | Open/edit/share on excalidraw.com |
-| `animated excalidraw`, `animate` | **Animated** | `.excalidraw` | Drag to excalidraw-animate |
+Always create an Obsidian Excalidraw Markdown file (`.md`) for the vault's Excalidraw plugin. No other output formats are supported by this skill.
 
 ---
 
 ## Workflow
 
-1. Detect output mode from trigger words
-2. **Step 0**: Assess depth (Simple vs Comprehensive)
-3. Run Design Process (Steps 1-5)
-4. Output in correct format
-5. Auto-save to `files/` directory
-6. Notify user with file path and usage instructions
+1. **Step 0**: Assess depth (Simple vs Comprehensive)
+2. Run Design Process (Steps 1-5)
+3. Create an Obsidian Excalidraw Markdown file using the vault template format
+4. Auto-save to `files/` directory
+5. Open the created file in Obsidian
+6. Take a screenshot of the rendered diagram to the operating system temp directory and visually inspect it
+7. Fix visible layout problems and repeat screenshot if needed
+8. Notify user with file path, screenshot path, diagram type, and visual patterns used
 
 ---
 
-## Output Formats
+## Output Format
 
-### Mode 1: Obsidian Format (Default)
+### Obsidian Format
 
 ```markdown
 ---
+tags:
+  - mark/excalidraw
 excalidraw-plugin: parsed
-tags: [excalidraw]
 ---
-==⚠  Switch to EXCALIDRAW VIEW in the MORE OPTIONS menu of this document. ⚠== You can decompress Drawing data with the command palette: 'Decompress current Excalidraw file'. For more info check in plugin settings under 'Saving'
 
 # Excalidraw Data
-
 ## Text Elements
 %%
 ## Drawing
@@ -177,45 +172,25 @@ tags: [excalidraw]
 %%
 ```
 
-- Frontmatter must include `tags: [excalidraw]`
+- Frontmatter must include `tags: [mark/excalidraw]`
+- Prefer the vault YAML-list style:
+  ```yaml
+  tags:
+    - mark/excalidraw
+  ```
+- Frontmatter must include `excalidraw-plugin: parsed`
 - JSON must be wrapped in `%%` markers
 - File extension: `.md`
+- Match the vault default template at `templates/excalidraw/templates/excalidraw_template.md`
 
-### Mode 2: Standard Excalidraw Format
+### Canonical Wrapper
 
-Pure JSON, no Markdown wrapping:
+When creating a new drawing, copy `templates/excalidraw/templates/excalidraw_template.md` as the wrapper and replace only:
+- `elements`
+- `files` when embedded files are needed
+- `appState.scrollX`, `appState.scrollY`, and `appState.zoom` when you need a better initial viewport
 
-```json
-{
-  "type": "excalidraw",
-  "version": 2,
-  "source": "https://excalidraw.com",
-  "elements": [],
-  "appState": { "gridSize": null, "viewBackgroundColor": "#ffffff" },
-  "files": {}
-}
-```
-
-File extension: `.excalidraw`
-
-### Mode 3: Animated Excalidraw Format
-
-Same as Standard, but each element gets a `customData.animate` field:
-
-```json
-{
-  "id": "element-1",
-  "type": "rectangle",
-  "customData": { "animate": { "order": 1, "duration": 500 } }
-}
-```
-
-- `order`: Playback sequence — lower numbers appear first
-- `duration`: Drawing duration in ms (default 500)
-- Same `order` = appear simultaneously
-- Recommended order: title → main framework → connectors → detail text
-- Usage: drag to https://dai-shi.github.io/excalidraw-animate/
-- File extension: `.excalidraw`
+Keep the template's frontmatter, headings, `%%` wrappers, `source`, and app defaults intact.
 
 ---
 
@@ -252,8 +227,6 @@ Same as Standard, but each element gets a `customData.animate` field:
 
 ### Text & Format
 - **All text must use** `fontFamily: 5` (Excalifont)
-- **Double quote replacement**: `"` → `『』`
-- **Parentheses replacement**: `()` → `「」`
 - **Font sizes**: Title 24-28px, Subtitle 18-20px, Body 14-16px
 - **Line height**: `lineHeight: 1.25`
 
@@ -275,37 +248,37 @@ Same as Standard, but each element gets a `customData.animate` field:
 
 ## JSON Structure
 
-**Obsidian mode:**
-```json
-{
-  "type": "excalidraw",
-  "version": 2,
-  "source": "https://github.com/zsviczian/obsidian-excalidraw-plugin",
-  "elements": [],
-  "appState": { "gridSize": null, "viewBackgroundColor": "#ffffff" },
-  "files": {}
-}
-```
+The JSON below shows the scene structure. For actual files, use the vault template as the source of truth and preserve its full `appState`.
 
-**Standard / Animated mode:**
 ```json
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "https://excalidraw.com",
+  "source": "https://github.com/zsviczian/obsidian-excalidraw-plugin/releases/tag/2.24.2",
   "elements": [],
-  "appState": { "gridSize": null, "viewBackgroundColor": "#ffffff" },
+  "appState": {
+    "theme": "dark",
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff",
+    "currentItemFontFamily": 5
+  },
   "files": {}
 }
 ```
 
 ## Required Fields for All Elements
 
-**IMPORTANT**: Do NOT include `frameId`, `index`, `versionNonce`, `strokeStyle`, or `rawText`. These cause "Error: invalid file" on excalidraw.com v0.17.0+. Use `boundElements: null` (not `[]`), and `updated: 1`.
+Use the current Obsidian Excalidraw plugin shape format. Keep generated JSON minimal and consistent. Omit fields unless they are needed by the element, binding, or style.
+
+`boundElements` rules:
+- For newly generated elements, use `boundElements: null` for elements with no bindings.
+- Use a non-empty array for shapes that own bound text or connected arrows.
+- Do not generate empty `boundElements: []` in new elements.
+- When editing existing plugin-emitted drawings, treat `boundElements: []` as valid and preserve it unless you are updating that element's bindings.
 
 ```json
 {
-  "id": "unique-id",
+  "id": "BoxPlan1",
   "type": "rectangle|text|arrow|ellipse|diamond",
   "x": 100, "y": 100,
   "width": 200, "height": 50,
@@ -328,7 +301,7 @@ Same as Standard, but each element gets a `customData.animate` field:
 }
 ```
 
-### Text-Specific Properties (do NOT include `rawText`)
+### Text-Specific Properties
 
 ```json
 {
@@ -344,11 +317,32 @@ Same as Standard, but each element gets a `customData.animate` field:
 }
 ```
 
-### Animated Mode Additional Field
+### Arrow Binding
 
 ```json
 {
-  "customData": { "animate": { "order": 1, "duration": 500 } }
+  "type": "arrow",
+  "startBinding": { "elementId": "source-shape-id", "focus": 0, "gap": 5 },
+  "endBinding": { "elementId": "target-shape-id", "focus": 0, "gap": 5 },
+  "startArrowhead": null,
+  "endArrowhead": "arrow"
+}
+```
+
+- `startBinding.elementId` and `endBinding.elementId` must point to existing element ids.
+- If an arrow is bound to a shape, add the arrow id to that shape's `boundElements`.
+- For unbound visual arrows, omit `startBinding` and `endBinding` entirely.
+
+When a shape has both bound text and connected arrows, merge all entries in one `boundElements` array:
+
+```json
+{
+  "id": "source_box",
+  "type": "rectangle",
+  "boundElements": [
+    { "id": "source_text", "type": "text" },
+    { "id": "arrow_to_target", "type": "arrow" }
+  ]
 }
 ```
 
@@ -357,30 +351,97 @@ Same as Standard, but each element gets a `customData.animate` field:
 ## Implementation Notes
 
 ### Text Elements Handling
-- The `## Text Elements` section in Markdown **must be left empty** — Obsidian Excalidraw plugin auto-populates it
+- For newly generated files, leave `## Text Elements` empty; the Obsidian Excalidraw plugin can populate it after opening/saving.
+- When editing existing drawings, preserve populated `# Text Elements`, `## Text Elements`, and `## Embedded Files` sections unless the edit explicitly requires rewriting the full drawing file.
+- Never copy lines from `# Text Elements` or `## Text Elements` into the `## Drawing` JSON as text elements.
+- Obsidian Excalidraw's Markdown text index parses element block IDs as exactly 8 characters. When generating or renaming elements manually, every element `id` should be exactly 8 characters, especially text elements and any element referenced by bindings or links.
+- Do not use short descriptive IDs like `"tTitle"`, `"goal"`, or `"plan"`. They can make the plugin concatenate `## Text Elements` metadata into visible canvas text on reload.
+- Do not use long descriptive IDs either when creating vault-native Obsidian drawings directly. The plugin may rewrite long IDs, which can break manually-authored bindings if every reference is not updated consistently.
+- After any manual ID repair, reopen the file in Excalidraw view and verify via API or screenshot that no text element contains `^`, `## Text Elements`, or other Markdown metadata.
+
+### Safe File Editing
+- Do not manually edit an Excalidraw `.md` file on disk while the same file is open in Excalidraw view. The plugin can autosave the open canvas and overwrite or re-import manual file changes.
+- `workspace:close` closes the active Obsidian tab/leaf, not the entire workspace.
+- Before rewriting an existing Excalidraw file directly, focus that file and close its active tab if it may be open:
+  ```bash
+  obsidian open path="files/[filename].md"
+  sleep 1
+  obsidian command id=workspace:close
+  ```
+- After direct file edits are complete, always reopen the file and run the normal screenshot verification pipeline:
+  ```bash
+  obsidian open path="files/[filename].md"
+  sleep 1
+  obsidian command id=obsidian-excalidraw-plugin:excalidraw-open-on-current
+  sleep 2
+  screenshot_path="${TMPDIR:-/tmp}/obsidian-excalidraw-[filename].png"
+  obsidian dev:screenshot path="$screenshot_path"
+  ```
+- For newly created files that have not been opened yet, direct creation in `files/` is safe; only open them after the file is fully written.
+
+### Prevent Visible IDs
+- Never include Obsidian block IDs like `^abc123` in JSON `text` or `originalText`.
+- Plugin-generated lines ending in `^id` inside `# Text Elements` or `## Text Elements` are Markdown metadata, not diagram labels.
+- Preserve plugin-generated `^id` metadata when editing existing files, but keep it out of the drawing JSON.
+- If a visible ID problem appears after editing/creating new elements, inspect the element IDs first. Short IDs in text elements are a known cause because the Obsidian Excalidraw parser expects 8-character IDs in the `## Text Elements` section.
+- If visible IDs appear in a screenshot, diagnose before accepting the image:
+  - IDs with a leading caret, like `^abc123`, usually mean Markdown metadata is visible or was accidentally copied into JSON text.
+  - Bare random strings without a caret may be accidental Excalidraw element ids or other debug/metadata text copied into JSON text.
+  - If the screenshot shows Markdown text sections, force Excalidraw view again.
+  - If the IDs are inside the canvas itself, inspect JSON `text` and `originalText` fields and remove the accidental ID text.
+
+### Compressed Drawings
+- This skill creates parsed JSON drawings only.
+- Existing `compressed-json` Excalidraw files are out of scope for direct editing unless they are first decompressed by the Excalidraw plugin.
+
+### Obsidian Verification
+After saving the diagram, open it in Obsidian and take a screenshot:
+
+```bash
+obsidian open path="files/[filename].md"
+sleep 1
+obsidian command id=obsidian-excalidraw-plugin:excalidraw-open-on-current
+sleep 2
+screenshot_path="${TMPDIR:-/tmp}/obsidian-excalidraw-[filename].png"
+obsidian dev:screenshot path="$screenshot_path"
+```
+
+Use the operating system temp directory for screenshots; do not store routine verification screenshots in the vault.
+
+Inspect the screenshot for visible problems:
+- screenshot is for the created file, not a previous tab
+- Excalidraw canvas or toolbar is visible, not raw Markdown
+- no visible metadata IDs such as `^abc123` or accidental element-id strings
+- blank or non-rendered canvas
+- clipped content
+- overlapping text or arrows
+- unreadably small text
+- arrows pointing to the wrong target
+- unbalanced whitespace
+
+If the screenshot is not for the target file, wait briefly and repeat `obsidian dev:screenshot`. If the screenshot reveals a layout issue, edit the diagram and repeat the screenshot.
 
 ### Coordinates & Layout
 - Origin (0,0) is top-left
 - All elements within 0-1200 x 0-800 pixels
-- Each element needs a unique `id` (string)
+- Each element needs a unique `id` string.
+- For Obsidian Excalidraw `.md` files, use exactly 8 characters for every generated element ID.
 
 ### File Naming
 
 | Mode | Format | Example |
 |---|---|---|
 | Obsidian | `[topic].[type].md` | `business-model.relationship.md` |
-| Standard | `[topic].[type].excalidraw` | `business-model.relationship.excalidraw` |
-| Animated | `[topic].[type].animate.excalidraw` | `business-model.relationship.animate.excalidraw` |
 
 ### Auto-save
 - Save to `files/` directory in vault root
-- Full path: `files/[filename]`
+- Full path: `files/[filename].md`
 
 ### User Feedback
 
 After generating, report:
 - Diagram generated + exact save location
-- How to view it (mode-specific)
+- Screenshot path used for visual verification
 - Diagram type chosen and why
 - Visual patterns used and why
 
@@ -405,11 +466,16 @@ After generating, report:
 - [ ] Important elements are larger/more isolated
 
 ### Technical
-- [ ] Text clean: `text` contains only readable words (no quotes/parens)
+- [ ] Text clean and readable
 - [ ] fontFamily: 5 on all text
 - [ ] roughness: 1 on all elements
 - [ ] opacity: 100 on all elements
-- [ ] No forbidden fields: frameId, versionNonce, strokeStyle, rawText
-- [ ] boundElements: null (not [])
+- [ ] `boundElements` is either null or a non-empty array
+- [ ] Existing plugin-emitted `boundElements: []` preserved unless actively rebinding that element
+- [ ] Every generated element `id` is exactly 8 characters
+- [ ] Arrow bindings point to existing element ids
+- [ ] No JSON `text`, `rawText`, or `originalText` contains `^id` or `## Text Elements` metadata
+- [ ] File opened via `obsidian open path="files/[filename].md"`
+- [ ] Screenshot taken to OS tmp via `obsidian dev:screenshot path="$screenshot_path"`
 
 See [references/excalidraw-schema.md](references/excalidraw-schema.md) for all element types.

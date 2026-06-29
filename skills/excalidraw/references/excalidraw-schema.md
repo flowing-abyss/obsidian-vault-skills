@@ -1,4 +1,6 @@
-# Excalidraw JSON Schema Reference
+# Obsidian Excalidraw JSON Schema Reference
+
+This file is a field reference. For copy-paste-ready elements, use `element-templates.md`.
 
 ## Color Palette
 
@@ -125,13 +127,13 @@
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "https://excalidraw.com",
-  "elements": [
-    // Array of elements
-  ],
+  "source": "https://github.com/zsviczian/obsidian-excalidraw-plugin/releases/tag/2.24.2",
+  "elements": [],
   "appState": {
+    "theme": "dark",
     "gridSize": null,
-    "viewBackgroundColor": "#ffffff"
+    "viewBackgroundColor": "#ffffff",
+    "currentItemFontFamily": 5
   },
   "files": {}
 }
@@ -199,3 +201,5 @@ To connect arrows to shapes:
   }
 }
 ```
+
+`startBinding.elementId` and `endBinding.elementId` must reference existing elements. Connected shapes should include the arrow id in their `boundElements`. Use `boundElements: null` only when an element has no bound text or connected arrows.

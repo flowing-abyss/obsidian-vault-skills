@@ -4,9 +4,11 @@ Copy-paste JSON templates for each element type. All templates use vault default
 - `fontFamily: 5` (Excalifont)
 - `roughness: 1` (hand-drawn style)
 - `opacity: 100`
-- `boundElements: null` (never use `[]`)
+- `boundElements: null` for unbound elements
+- non-empty `boundElements` arrays for shapes with bound text or connected arrows
 - `updated: 1` (never use timestamps)
-- **Forbidden fields** (omit always): `frameId`, `index`, `versionNonce`, `strokeStyle`, `rawText`
+- Do not generate empty `boundElements: []` in new elements
+- Preserve existing plugin-emitted `boundElements: []` unless actively rebinding that element
 
 Colors reference:
 - Title/stroke: `#1e40af` (deep blue)
@@ -210,7 +212,7 @@ For conditions, branching logic.
 
 ## Arrow
 
-For connections between shapes. Use `startBinding`/`endBinding` to snap to shapes.
+For connections between shapes. Use `startBinding`/`endBinding` to snap to shapes, and add the arrow id to each connected shape's `boundElements`.
 
 ```json
 {
@@ -247,6 +249,41 @@ For connections between shapes. Use `startBinding`/`endBinding` to snap to shape
 For curves: add midpoint in `points`, e.g. `[[0,0],[60,-40],[118,0]]`.
 For bidirectional: set `startArrowhead: "arrow"`.
 For unconnected arrow: omit `startBinding`/`endBinding` entirely.
+Every `elementId` in `startBinding` and `endBinding` must point to an existing element.
+
+### Shape With Bound Text and Arrow
+
+When a shape has both text and a connected arrow, keep all bindings in one `boundElements` array. Do not overwrite the text binding when adding the arrow.
+
+```json
+{
+  "type": "rectangle",
+  "id": "source_box",
+  "x": 100,
+  "y": 100,
+  "width": 180,
+  "height": 80,
+  "angle": 0,
+  "strokeColor": "#1e40af",
+  "backgroundColor": "#dbeafe",
+  "fillStyle": "solid",
+  "strokeWidth": 2,
+  "roughness": 1,
+  "opacity": 100,
+  "groupIds": [],
+  "roundness": {"type": 3},
+  "seed": 120001,
+  "version": 1,
+  "isDeleted": false,
+  "boundElements": [
+    {"id": "source_text", "type": "text"},
+    {"id": "arrow_to_target", "type": "arrow"}
+  ],
+  "updated": 1,
+  "link": null,
+  "locked": false
+}
+```
 
 ---
 
@@ -283,7 +320,7 @@ For timelines, tree trunks, dividers. Does NOT have arrowheads.
 ```
 
 For horizontal: `points: [[0,0],[200,0]]`, `width: 200, height: 0`.
-For dashed divider: add `"strokeStyle": "dashed"` (exception — allowed on lines).
+For dashed divider: add `"strokeStyle": "dashed"` when the visual distinction is necessary.
 
 ---
 
