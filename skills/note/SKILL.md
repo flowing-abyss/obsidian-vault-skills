@@ -88,6 +88,20 @@ Additionally: `category/<name>` — assign to existing category (validate first!
 - **Atomic:** One idea per note
 - **Source references:** Use footnotes for URLs and citations
 
+### Visual Emphasis
+
+In this vault, `**bold**` renders **red** and `*italic*` renders *green*, so both create strong color contrast. Treat them as semantic signals, not decoration:
+
+- Keep plain text as the default. Emphasize only what materially helps the reader find the main conclusion, distinction, warning, or action.
+- Use bold for the strongest focal point, usually no more than one short fragment in a compact paragraph or list item. Do not bold whole paragraphs or restyle headings inside their text.
+- Use italics for a local nuance, contrast, term, or brief aside. Do not alternate bold and italics merely to create rhythm.
+- Avoid combined `***bold italic***`, underlining, and several competing colored fragments in the same sentence unless the notation itself requires them.
+- Before saving, scan the note at a glance. If several accents compete for attention, remove formatting until the intended reading hierarchy is immediately clear.
+
+Overloaded: `**Threshold detects the signal**, *Strength controls the amount*, **change them carefully**.`
+
+Balanced: `Threshold detects the signal; Strength controls the amount. **Change one parameter at a time.**`
+
 ## Example Note
 
 Filename: `base/notes/zettelkasten method.md`

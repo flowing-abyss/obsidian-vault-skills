@@ -1,11 +1,11 @@
 ---
 name: flashcards
-description: 'Create flashcard notes for Anki integration with proper deck paths, category tags, and content structure (no empty lines). INVOKE when user wants to create study cards or flashcards for spaced repetition. Triggers: "create flashcard", "flashcards", "study cards", "Anki", "spaced repetition", "карточка", "создай флэшкарту", "карточки для повторения", "анки карточка", "флэшкарды". Shows example first, creates on confirmation.'
+description: 'Create recall-first flashcard notes that also work as useful Obsidian knowledge notes, with validated Anki decks, one compact answer ending at the first blank line, optional extended explanations/tables/media, and footnote sources. INVOKE whenever the user wants flashcards, study cards, Anki material, spaced repetition, a knowledge deck, or wants to turn concepts into memorable atomic notes. Triggers: "create flashcard", "flashcards", "study cards", "Anki", "spaced repetition", "карточка", "создай флэшкарту", "карточки для повторения", "анки карточка", "флэшкарды", "колода знаний". Shows an example first and creates after confirmation.'
 ---
 
 # Obsidian Flashcards
 
-Create flashcard notes with correct metadata structure and content formatting for Anki integration.
+Create flashcards that are easy to grade during recall and remain valuable when opened as ordinary Obsidian notes. The mandatory answer stays small; explanations, tables, sources, and media live after the card boundary.
 
 ## Flashcard Template
 
@@ -34,18 +34,54 @@ updated: 2026-02-08T15:30:00+07:00  # ISO 8601 with timezone
 ### Content Structure
 
 ```markdown
-**Title** or **Term**
+**One precise question or term**
 —
-Content / Definition / Explanation
-[Optional: Code blocks, quotes, lists, etc.]
+The smallest sufficient answer.[^1]
+
+## Подробнее
+
+Optional explanation, decision table, example, callout, illustration, or audio.
+
+[^1]: [Source title](https://example.com)
 ```
 
 **CRITICAL content rules:**
-- **NO EMPTY LINES** — Plugin limitation requires no blank lines in flashcard body
+- Add exactly one blank line between closing frontmatter and the card front.
 - Use `—` (em dash) as separator after the title/term
-- Title should be bolded with `**Title**`
-- Keep content atomic (one concept per flashcard)
+- The first blank line after the answer ends the Anki back side. Everything below it is extended note content and is not part of the recall criterion.
+- Do not put blank lines inside the mandatory answer. Keep it to one independently gradable idea.
+- Bold the front as `**Question or term**`. Prefer a question when it makes the expected recall clearer.
+- Cite claims with footnote markers in the relevant sentence. Put footnote definitions after a blank line; do not add a separate `Source: [^1]` label.
+- Keep the card atomic, but allow the extended note to contain concise details, tables, callouts, examples, wikilinks, illustrations, or audio.
 - ID field is added automatically by a separate plugin — do not include it manually
+
+## Recall Design
+
+Design the card around how the learner will decide whether recall succeeded:
+
+1. **One cue, one grading target.** The front must make it clear what must be reproduced.
+2. **Minimum sufficient answer.** Include only the information that must be remembered every time.
+3. **Context independence.** The mandatory answer must make sense without opening Google or another note.
+4. **Refined wording.** Remove qualifiers and examples that do not change the core claim.
+5. **Split overload.** If it is unclear how many details must be recalled, create multiple cards instead of a list-heavy answer.
+6. **Coverage over quotas.** For a deck, create as many cards as needed to cover distinct learning objectives; do not target an arbitrary count or duplicate ideas to enlarge the deck.
+
+### Extended Note Content
+
+After the first blank line, the flashcard becomes a normal knowledge note. Use this area to make the note useful without expanding the required recall:
+
+- explain why the answer matters;
+- add a small decision table when it reduces ambiguity;
+- link prerequisite and neighboring concepts with wikilinks;
+- add a callout for a practical test or common mistake;
+- attach an illustration or audio example when perception is part of the concept;
+- add authoritative sources as footnotes.
+
+Media placement follows the learning goal:
+
+- put media on the front when it is the stimulus to identify;
+- keep it in the mandatory answer only when it is necessary feedback;
+- otherwise place it in the extended note as optional reinforcement.
 
 ## Common Flashcard Types
 
@@ -71,6 +107,9 @@ updated: 2026-02-08T15:30:00+07:00
 **map()**
 —
 Creates a new array by applying a function to each element of the original array.
+
+## Example
+
 ```js
 const numbers = [1, 2, 3, 4];
 const doubled = numbers.map(x => x * 2);
@@ -97,9 +136,14 @@ updated: 2026-02-08T15:30:00+07:00
 
 **Quicksort**
 —
-A divide-and-conquer sorting algorithm that selects a pivot element and partitions the array around it.
-Average time complexity: O(n log n)
-Worst case: O(n²)
+A divide-and-conquer sorting algorithm that partitions elements around a selected pivot.
+
+## Complexity
+
+| Case | Time |
+|---|---:|
+| Average | `O(n log n)` |
+| Worst | `O(n²)` |
 ```
 
 ## Category and Deck Validation
@@ -152,7 +196,10 @@ Worst case: O(n²)
 3. **Generate example flashcard** with:
    - Proper filename (lowercase, noun phrases, no dates/numbers)
    - Correct frontmatter based on type with VALIDATED category and deck
-   - Content with `—` separator and NO EMPTY LINES
+   - Exactly one blank line after frontmatter
+   - A single recall cue, `—`, and a compact mandatory answer ending at the first blank line
+   - Optional extended note content after that boundary
+   - Footnote sources and useful media where appropriate
    - Current timestamp in ISO 8601 with timezone
 
 4. **Show example to user** and ask: "Is this correct? Should I create this flashcard?"
@@ -164,9 +211,24 @@ Worst case: O(n²)
 1. **Validate category and deck FIRST** (same as single flashcard)
 2. **Confirm topic and type** with user
 3. **Ask for flashcard data** in structured format
-4. **Generate examples for all flashcards** with validated metadata
-5. **Show examples and ask for confirmation**
-6. **Create all flashcards** if user confirms
+4. **Build a learning-objective map** and split it into independently gradable cards; do not impose a fixed card count
+5. **Generate examples for all flashcards** with validated metadata
+6. **Show examples and ask for confirmation**
+7. **Create all flashcards** if user confirms
+
+## Quality Gate
+
+Before creating each card, verify:
+
+- the front asks for one thing;
+- the mandatory back can be graded as recalled/not recalled without guessing a list length;
+- the first blank line appears only after the mandatory answer;
+- the mandatory answer is understandable without the extended note;
+- extended details do not silently add new required recall criteria;
+- tables are used for decisions or comparisons, not decoration;
+- sources are footnotes with a blank line before their definitions;
+- media improves recognition or understanding and is not merely ornamental;
+- filename, category tag, and deck are valid and unique.
 
 ## Filename Rules
 
@@ -244,7 +306,7 @@ Check `home/prefixes.md` for the current list of available decks. Common example
 ## Tips
 
 - **Always validate first** — read `home/prefixes.md` and check `base/categories/` before creating flashcards
-- **Keep flashcards atomic** — one concept per card
+- **Keep recall atomic** — one grading target per card; move nuance below the first blank line
 - **Use hierarchical decks** for better organization (`category::subcategory`)
 - **Code flashcards** should include working examples
 - **Exact definitions** are for formal terminology
