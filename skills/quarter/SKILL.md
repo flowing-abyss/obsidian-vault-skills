@@ -37,8 +37,6 @@ cssclasses:
   - hide-backlinks
 ---
 
-> [!success]- 🔻 history 🔻
-> `$=await dv.view("templates/views/periodic", {type: "month"})`
 ```
 
 If the quarterly note exists — find `[!quarterly-review]-` and replace it. Otherwise create with template, then append the review block after `[!success]-`.

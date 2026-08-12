@@ -40,8 +40,6 @@ cssclasses:
   - hide-backlinks
 ---
 
-> [!success]- 🔻 history 🔻
-> `$=await dv.view("templates/views/periodic", {type: "day"})`
 ```
 
 If the weekly note already exists — find the `[!weekly-review]-` block and replace it. Otherwise create the note with the template above, then append the review block after `[!success]-`.

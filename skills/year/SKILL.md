@@ -29,8 +29,6 @@ created: YYYY-MM-DDTHH:mm:ssZ
 updated: YYYY-MM-DDTHH:mm:ssZ
 ---
 
-> [!success]- 🔻 history 🔻
-> `$=await dv.view("templates/views/periodic", {type: "quarter"})`
 ```
 
 Note: yearly notes have **no `up:` field** — they are the top of the hierarchy.
