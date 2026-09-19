@@ -4,7 +4,7 @@ Display Obsidian vault structure as a tree.
 Organizes categories with their meta-notes, problems, and hierarchies.
 
 Vault root is resolved automatically from this script's location:
-  .claude/skills/obsidian-structure/structure.py → 4 levels up = vault root
+  .claude/skills/structure/scripts/structure.py → 4 levels up = vault root
 """
 
 import re

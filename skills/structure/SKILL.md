@@ -59,7 +59,7 @@ Category → Meta-note → Problem → Hierarchy
 When the user asks anything about their real vault — where to put a note, how to reorganize an area, what's missing, how something fits — first run the script to load the live structure into context:
 
 ```bash
-python3 .claude/skills/obsidian-structure/scripts/structure.py
+python3 .claude/skills/structure/scripts/structure.py
 ```
 
 The script outputs the full vault tree. Use it to understand what actually exists before giving any advice. Do not annotate or score the output — it's context for you, not a report for the user.

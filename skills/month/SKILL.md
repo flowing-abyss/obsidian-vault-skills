@@ -285,7 +285,7 @@ After the `[!monthly-review]-` callout, appended **outside it** (in the note bod
 
 Write the italic question in detected language. Use extended form only when a pattern is unambiguous.
 
-**Note:** The "Focus for next month" section is read by the quarterly-review skill when computing Planned vs Actual.
+**Note:** The "Focus for next month" section is read by the `quarter` skill when computing Planned vs Actual.
 
 ## Chat Output
 

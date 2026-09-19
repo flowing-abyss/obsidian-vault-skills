@@ -342,7 +342,7 @@ After the `[!quarterly-review]-` callout, appended **outside it** (in the note b
 
 Write the italic question in detected language. Use extended form only when a pattern is unambiguous.
 
-**Note:** The "Focus for next quarter" section is read by the yearly-review skill when computing theme trajectory and priorities.
+**Note:** The "Focus for next quarter" section is read by the `year` skill when computing theme trajectory and priorities.
 
 ## Chat Output
 

@@ -283,7 +283,7 @@ Replace the section above with:
 
 Write the italic question in detected language. Use extended form only when a pattern is unambiguous. Default to the plain two-header form otherwise.
 
-**Note:** The "Focus for next week" section is read by the monthly-review skill when computing Planned vs Actual.
+**Note:** The "Focus for next week" section is read by the `month` skill when computing Planned vs Actual.
 
 ## Chat Output
 

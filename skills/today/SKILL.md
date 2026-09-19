@@ -111,7 +111,7 @@ obsidian search:context query="task-todo:#task/inbox" path=periodic/daily  # ope
 ```markdown
 - [ ] #task/inbox Add Espanso script to Gists
 - [ ] #task/inbox #category/public Record video about X
-- [ ] #task/inbox #priority/a Urgent task 📅 2026-02-15
+- [ ] #task/inbox Urgent task 🔺 📅 2026-02-15
 ```
 
 4. **Delete from source notes:**

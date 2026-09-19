@@ -69,7 +69,7 @@ Plain wikilinks in a nested bulleted list. No emojis or type labels — Obsidian
 
 ### Discourse Node Notes
 
-Each node is a separate note in `base/notes/`. Follow standard `obsidian-notes` naming rules. Discourse type is determined solely by the tag in frontmatter.
+Each node is a separate note in `base/notes/`. Follow the naming rules from the `note` skill. Discourse type is determined solely by the tag in frontmatter.
 
 ```yaml
 ---
