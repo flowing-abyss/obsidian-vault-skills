@@ -7,7 +7,7 @@ description: 'Create regular knowledge notes in base/notes/. INVOKE whenever use
 
 Create regular knowledge notes in `base/notes/` — the primary location for knowledge capture.
 
-**Syntax validation:** Use `obsidian-markdown` skill for markdown syntax rules (wikilinks, callouts, footnotes, LaTeX, mermaid, etc.)
+**Syntax validation:** Use the `markdown` skill for markdown syntax rules (wikilinks, callouts, footnotes, LaTeX, mermaid, etc.)
 
 ## Filename Rules
 
@@ -33,54 +33,21 @@ Create regular knowledge notes in `base/notes/` — the primary location for kno
 | `sorting algorithm.md` | `my sorting algorithm.md` | No pronouns |
 | `binary search.md` | `binary search 1.md` | No numbers |
 
-## Category Validation
+## Creating the note
 
-**CRITICAL:** Only use EXISTING categories. Categories are human-created and managed.
+`vault` below stands for `python3 .claude/_engine/vault.py`, run from the vault root.
 
-### Finding Valid Categories
+| Need | Command |
+| - | - |
+| Note types and what each is for | `vault types note` |
+| Fields and allowed values | `vault schema note/basic/primary` |
+| Existing categories | `vault find "#system/category" --limit 100` |
+| Create | `vault new note/basic/primary --title "spaced repetition" --body-file FILE` |
+| Add a category tag | `--set tags=note/basic/primary --set tags=category/<name>` |
 
-Before assigning a category tag, discover existing categories:
+The engine fills `aliases`, `icon`, `color`, `created` and `updated`, refuses a name that is already taken, and refuses invalid values without writing. Edit the body directly afterwards; a hook validates each edit.
 
-| Field | Location | Glob Pattern |
-|-|-|-|
-| `category` | `base/categories/` | `base/categories/*.md` |
-
-### Workflow
-
-1. **Discover existing categories** — use either:
-   - `obsidian files folder=base/categories ext=md` (CLI, cross-platform)
-   - Glob pattern: `base/categories/*.md` (Claude built-in Glob tool)
-2. **Match by relevance** — choose the most appropriate existing category for the note's topic
-3. **If no match exists** — omit the category tag or ask user; NEVER invent categories
-4. **Category tag format** — `category/<folder_name>` where `<folder_name>` matches the category note filename (without `.md`)
-
-## Frontmatter Template
-
-```yaml
----
-tags:
-  - note/basic/primary
-  - category/<existing_category>  # Optional — only if relevant category exists
-aliases: []
-created: 2025-08-10T23:25:33+07:00
-updated: 2025-08-10T23:25:33+07:00
----
-```
-
-### Frontmatter Rules
-
-- **Date format:** ISO 8601 with timezone offset (`YYYY-MM-DDTHH:mm:ssZ`)
-- **Required tag:** One of the note type tags (see below)
-- **Optional tag:** `category/<name>` — only if category exists (replace spaces with `_` in category name)
-
-### Tag Taxonomy
-
-Fetch current valid note type tags from manifests:
-```bash
-obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/notes')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
-```
-
-Additionally: `category/<name>` — assign to existing category (validate first!).
+**Categories are human-owned.** Use only a category that exists. The tag is `category/<file name>` with spaces replaced by `_`. If none fits, leave the tag out or ask. If the user asked for the closest one, pick it and say which one you picked. Never invent one.
 
 ## Content Principles
 
@@ -107,15 +74,6 @@ Balanced: `Threshold detects the signal; Strength controls the amount. **Change 
 Filename: `base/notes/zettelkasten method.md`
 
 ```markdown
----
-tags:
-  - note/basic/primary
-  - category/productivity  # Only if base/categories/productivity.md exists!
-aliases: []
-created: 2025-08-10T23:25:33+07:00
-updated: 2025-08-10T23:25:33+07:00
----
-
 The Zettelkasten method is a knowledge management system based on networked atomic notes[^1].
 
 Each note should contain one idea and link to related notes, forming a network of knowledge.

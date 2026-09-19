@@ -11,25 +11,19 @@ Create flashcards that are easy to grade during recall and remain valuable when 
 
 All flashcards follow this structure:
 
-### YAML Frontmatter
+### Metadata
 
-```yaml
----
-tags:
-  - note/specific/exact  # or note/specific/code
-  - category/<category_name>  # e.g., category/computer_science
-aliases: []  # or specific aliases for code/exact types
-deck: obsidian::<deck_path>  # e.g., obsidian::computer_science::algorithms
-created: 2026-02-08T15:30:00+07:00  # ISO 8601 with timezone
-updated: 2026-02-08T15:30:00+07:00  # ISO 8601 with timezone
----
+Do not write frontmatter by hand. `vault` below stands for `python3 .claude/_engine/vault.py`, run from the vault root.
+
+```bash
+vault new note/specific/exact --title "binary search" \
+  --set tags=note/specific/exact --set tags=category/computer_science \
+  --set deck="obsidian::computer_science::algorithms" --body-file FILE
 ```
 
-**Important metadata rules:**
-- **Tags**: Must include note taxonomy (`note/specific/code` or `note/specific/exact`) and category tag (`category/<name>`)
-- **Deck**: Format is `obsidian::<category>` or `obsidian::<category>::<subcategory>` (use `::` for hierarchy)
-- **Aliases**: Can be empty `[]` or include specific terms for quick reference
-- **Dates**: ISO 8601 format with timezone (generated automatically based on current time)
+- Type is `note/specific/code` or `note/specific/exact` (`vault types note/specific` describes them).
+- `deck` uses `::` for hierarchy. Decks already in use: `vault values note/specific/exact deck`.
+- The engine fills `aliases`, `icon`, `color`, `created`, `updated`, puts exactly one blank line after the frontmatter, and refuses invalid values without writing.
 
 ### Content Structure
 
@@ -195,12 +189,10 @@ A divide-and-conquer sorting algorithm that partitions elements around a selecte
 
 3. **Generate example flashcard** with:
    - Proper filename (lowercase, noun phrases, no dates/numbers)
-   - Correct frontmatter based on type with VALIDATED category and deck
-   - Exactly one blank line after frontmatter
+   - Metadata with VALIDATED category and deck, created through `vault new`
    - A single recall cue, `—`, and a compact mandatory answer ending at the first blank line
    - Optional extended note content after that boundary
    - Footnote sources and useful media where appropriate
-   - Current timestamp in ISO 8601 with timezone
 
 4. **Show example to user** and ask: "Is this correct? Should I create this flashcard?"
 
@@ -256,19 +248,19 @@ The `change-deck.py` script (included in this skill) helps reorganize flashcards
 
 From the Obsidian vault root:
 ```bash
-python3 .claude/skills/obsidian-flashcards/change-deck.py [old_deck] [new_deck] [relative_path]
+python3 .claude/skills/flashcard/change-deck.py [old_deck] [new_deck] [relative_path]
 ```
 
 **Examples**:
 ```bash
 # Change all computer_science cards to computer_science/basics
-python3 .claude/skills/obsidian-flashcards/change-deck.py "computer_science" "computer_science/basics"
+python3 .claude/skills/flashcard/change-deck.py "computer_science" "computer_science/basics"
 
 # Change within specific directory
-python3 .claude/skills/obsidian-flashcards/change-deck.py "python" "python/advanced" base/notes
+python3 .claude/skills/flashcard/change-deck.py "python" "python/advanced" base/notes
 
 # Search from current directory
-python3 .claude/skills/obsidian-flashcards/change-deck.py "math" "math/calculus" .
+python3 .claude/skills/flashcard/change-deck.py "math" "math/calculus" .
 ```
 
 ### What it does
