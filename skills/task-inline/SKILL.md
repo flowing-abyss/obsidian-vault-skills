@@ -55,13 +55,22 @@ Before creating tasks, dynamically discover existing categories:
 
 Add after category tag if needed:
 
-- **Priority**: `#priority/a` (critical) to `#priority/e` (low)
 - **Time**: `#time/quick`, `#time/moderate`, `#time/lengthy`, `#time/long`
 - **Effort**: `#effort/easy`, `#effort/medium`, `#effort/hard`
 
+## Priority (Tasks plugin native)
+
+Not a tag — a bare emoji signifier, and it MUST trail the description text
+(after everything else, right before any date suffix), or Tasks' emoji-format
+parser won't recognize it:
+
+`🔺` Highest, `⏫` High, `🔼` Medium, `🔽` Low, `⏬` Lowest — no marker at all
+means normal/default priority (Tasks treats unmarked tasks as ranking between
+Low and Medium), so skip it entirely for an ordinary task.
+
 ## Date/Time Suffixes
 
-Add at end of task:
+Add at end of task, after priority if present:
 
 - Due date: `📅 YYYY-MM-DD`
 - Scheduled time: `⏰ HH:MM`
@@ -72,7 +81,7 @@ Add at end of task:
 ```markdown
 - [ ] #task/inbox Разобраться с новым плагином
 - [ ] #task/one-off #category/marketing Подготовить презентацию
-- [ ] #task/next_action #category/development #priority/a Исправить баг в API
+- [ ] #task/next_action #category/development Исправить баг в API 🔺
 - [ ] #task/waiting_for #category/household Попросить починить кран 📅 2026-02-01
 - [ ] #task/regular #category/health Тренировка в зале
 - [ ] #task/reference #category/productivity Посмотреть видео про GTD | https://example.com
