@@ -137,8 +137,8 @@ def find_notes_with_deck(search_path, deck_name):
 
 
 def main():
-    # Get script directory
-    script_dir = Path(__file__).parent.absolute()
+    # Resolve user paths from the Obsidian vault root.
+    vault_root = Path(__file__).parents[3]
 
     # Parse command line arguments
     if len(sys.argv) < 3:
@@ -154,7 +154,7 @@ def main():
     relative_path = sys.argv[3] if len(sys.argv) > 3 else "."
 
     # Resolve the search path
-    search_path = (script_dir / relative_path).resolve()
+    search_path = (vault_root / relative_path).resolve()
 
     if not search_path.exists():
         print(
