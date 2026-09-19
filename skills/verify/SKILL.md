@@ -1,17 +1,13 @@
 ---
-description: >-
-  For each [?] or [? <note>] marker — fetch the primary source for the original
-  claim, check replication (balanced: failures and best positive evidence) and
-  all relevant competing theories (quality over quantity, each with required
-  URL), patch only affected sentences proportionally, and insert a collapsible
-  callout. Status uses emoji icons (✅/⚠️/❌). Callout title states the original
-  claim neutrally. Framing: three elements (what was measured, conceptual gap,
-  bridging assumptions). Alternatives use **bold** for theory names, never
-  brackets. Practical status: three elements (what is empirically supported with
-  effect size, where the claim overreaches, correct framing going forward).
-  Multi-item fields use <br> for one item per line. Every URL must point to a
-  primary source. No calques for untranslatable terms.
+name: verify
+description: 'Verify only claims marked [?] or [? note] in a vault note against primary sources, replication evidence, and competing theories; patch the marked passages and add source callouts. INVOKE only when the user explicitly asks to verify those markers, or invokes /verify or $verify. Triggers: "verify marked claims", "проверь отмеченные утверждения", "верифицируй маркеры", "проверь маркеры [?]". NOT for general fact-checking, unmarked claims, or literature reviews.'
 ---
+
+# Verify marked claims
+
+Use the note path supplied by the user. When invoked manually, use `$ARGUMENTS` as the path. If no path is supplied and the current note is available in context, use that note.
+
+## Workflow
 
 Find every [?] or [? <note>] marker in the current note.
 If a note is present, treat it as a specific doubt or research direction.
