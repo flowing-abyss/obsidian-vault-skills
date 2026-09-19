@@ -5,79 +5,32 @@ description: 'Create source tracking notes for books, articles, videos, papers, 
 
 # Sources
 
-A source-note is a structured container for knowledge extracted from an external resource, such as a book, paper, or video. It serves as an anchor for highlights, quotes, and your initial interpretations. Its primary purpose is to distill outside information into accessible insights, providing a reliable reference point that fuels ongoing projects and feeds the knowledge base.
+A source note is a structured container for knowledge extracted from an external resource, such as a book, paper, or video. It anchors highlights, quotes, and first interpretations, and gives projects and knowledge notes a reliable reference point.
 
 ## Commands
 
-| Action | Command |
+Run from the vault root: `V="python3 .claude/_engine/vault.py"`
+
+| Need | Command |
 | - | - |
-| Create source | `python3 ".claude/skills/source/scripts/source.py" create --title "Title" [options]` |
-| Update source | `python3 ".claude/skills/source/scripts/source.py" update --title "Title" [options]` |
+| Types and what each is for | `$V types source` |
+| Fields, allowed values and their meaning | `$V schema source/book` |
+| Note names a link field accepts | `$V values source/book creator --like "text"` |
+| Create | `$V new source/book --title "Title" --set key=value [--body-file FILE]` |
+| Change metadata | `$V set "Title" key=value` (lists: `add`, `remove`) |
+| Validate after a direct edit | `$V check "Title"` |
 
-Recommendation: direct editing in the note is the default way to update content. Use `update` mainly when you want to modify notes via script from any working directory.
+The engine reads the vault manifests, fills fixed values, defaults, `created` and `updated`, and takes the note body scaffold from the type's template. It refuses invalid input, writes nothing, and says what to fix. Correct the input. Never work around an error by writing frontmatter by hand.
 
-## Source Options
+- Repeat `--set key=value` to build a list. Link fields take plain note names.
+- Pass only what you know. Skip a field instead of guessing a value.
+- Edit the note body directly. A hook validates every edit; without hooks run `check`.
 
-| Option | Explanation |
-| - | - |
-| `--title` | Required for `create` and `update` |
-| `--tag` | Single source type tag (required in `create`) |
-| `--alias` | Repeatable alias |
-| `--status` | Source status |
-| `--rating` | Subjective rating |
-| `--scientificity` | Evidence-quality level |
-| `--category`, `--meta`, `--problem` | Repeatable taxonomy links |
-| `--creator`, `--production` | Repeatable links |
-| `--start`, `--end` | Source dates (YYYY-MM-DD) |
-| `--body` | Note body |
+## Choosing values
 
-In `update`, only passed fields are changed. List fields replace the entire list.
-
-## Where To Get Names
-
-> **Schema:** `Field` ➔ `Fast Command` ➔ `Fallback` (format: `obsidian search query="<Fallback>"`)
-
-- `category` ➔ `rg --files -g "*.md" base/categories` ➔ `tag:system/category`
-- `meta` ➔ `rg --files -g "*.md" base/_meta-notes` ➔ `tag:system/high/meta`
-- `problem` ➔ `rg --files -g "*.md" base/_problems` ➔ `tag:system/high/problem`
-- `creator` ➔ `rg --files -g "*.md" base/creators base/contacts` ➔ `tag:creator OR tag:contact`
-- `production` ➔ `rg --files -g "*.md" base/productions` ➔ `tag:production`
-
-Recommendation: request names only if the creation script returned an error or the user instructed to add links to these fields. In other cases, use default tools.
-
-## Statuses
-
-| Status | Meaning |
-| - | - |
-| `⬛` | Abandoned |
-| `🟥` | ToDo |
-| `🟦` | In Progress |
-| `⚛️` | Atomizing |
-| `🟩` | Done |
-
-## Ratings
-
-| Rating | Meaning |
-| - | - |
-| `🌕` | Excellent |
-| `🌔` | Very Good |
-| `🌓` | Good |
-| `🌒` | Weak |
-| `🌑` | Poor |
-
-## Scientificity
-
-| Level | Meaning |
-| - | - |
-| `🅰️` | Primary research |
-| `🅱️` | Secondary research |
-| `👓` | Expert/industry |
-| `📢` | Popular science |
-| `💬` | Opinion/unverified |
-
-## Tags
-
-Fetch current valid tags from manifests:
-```bash
-obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/sources')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
-```
+- Pick the most specific type from `types source`. The parent type `source` alone is reported as incomplete.
+- `status`, `rating` and `scientificity` each come with a meaning per value in `schema`. Set `rating` and `scientificity` only when the user gave a judgment or the source makes it evident.
+- `creator` and `production` may name notes that do not exist yet. Create those through the `people` skill when the user wants them.
+- In `schema`, "key must exist, may be empty" means exactly that: leave the value empty when you do not know it.
+- No category fits: ask the user. If the user asked for the closest one, pick it and say which one you picked. Never invent a category.
+- `meta` must belong to one of the note's categories, and `problem` to one of its metas. A write that breaks this is refused. Use `values ... --given category="name"` to list what fits.

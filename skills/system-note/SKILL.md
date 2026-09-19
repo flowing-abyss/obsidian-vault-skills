@@ -5,60 +5,35 @@ description: 'Create structural system notes: meta-notes (thematic hubs), proble
 
 # System Notes
 
-**Category**
-A category serves as a high-level domain dashboard and structural container. It provides a macroscopic overview of a broad area, utilizing filtered tables and visual diagrams to map and navigate all underlying knowledge within that scope. Categories are created *manually* by the user.
+**Category.** A high-level domain dashboard. Categories are created and edited only by the user. Never create, edit, rename or delete them.
 
-**Meta-note**
-A meta-note acts as a thematic hub or dynamic roadmap for in-depth research. It structures complex topics and guides exploration within a specific domain, always anchored to a parent category.
+**Meta-note.** A thematic hub or roadmap for in-depth research, anchored to a parent category.
 
-**Problem**
-A problem note isolates a specific research question or conceptual challenge. It drives focused investigation on a targeted issue, drawing essential context and strict boundaries from its parent meta-note and category.
+**Problem.** A specific research question or conceptual challenge. Takes context and boundaries from its parent meta-note and category.
 
-**Hierarchy**
-A hierarchy note is a structural aggregator that compiles and sequences atomized notes. It transforms isolated pieces of information into a cohesive, logically linked narrative, requiring at least a parent category to maintain system order.
+**Hierarchy.** A structural aggregator that sequences atomized notes into a linked narrative. Needs at least a parent category.
 
 ## Commands
 
-| Action | Command |
+Run from the vault root: `V="python3 .claude/_engine/vault.py"`
+
+| Need | Command |
 | - | - |
-| Create system note | `python3 ".claude/skills/system-note/scripts/system_note.py" create --title "Title" --tag system/high/meta --category "Category" [options]` |
-| Update system note | `python3 ".claude/skills/system-note/scripts/system_note.py" update --title "Title" --tag system/high/meta [options]` |
+| Types and what each is for | `$V types system/high` |
+| Fields, allowed values and their meaning | `$V schema system/high/problem` |
+| Note names a link field accepts | `$V values system/high/problem meta --like "text"` |
+| Create | `$V new system/high/problem --title "Title" --set key=value [--body-file FILE]` |
+| Change metadata | `$V set "Title" key=value` (lists: `add`, `remove`) |
+| Validate after a direct edit | `$V check "Title"` |
 
-Recommendation: direct editing in the note is the default way to update content. Use `update` mainly when you want to modify notes via script from any working directory.
+The engine reads the vault manifests, fills fixed values, defaults, `created` and `updated`, and takes the note body scaffold from the type's template. It refuses invalid input, writes nothing, and says what to fix. Correct the input. Never work around an error by writing frontmatter by hand.
 
-## Options
+- Repeat `--set key=value` to build a list. Link fields take plain note names.
+- Pass only what you know. Skip a field instead of guessing a value.
+- Edit the note body directly. A hook validates every edit; without hooks run `check`.
 
-| Option | Explanation |
-| - | - |
-| `--title` | Required for `create` and `update` |
-| `--tag` | Required: `system/high/meta`, `system/high/problem`, `system/high/hierarchy` |
-| `--category` | Required in `create`; required logically for all system notes |
-| `--meta` | Required for `problem`; optional for `hierarchy` |
-| `--problem` | Optional for `hierarchy` |
-| `--alias` | Repeatable alias |
-| `--relevant` | `true` or `false` |
-| `--body` | Note body |
+## The chain
 
-In `update`, only passed fields are changed. List fields replace the entire list.
+`Category -> Meta -> Problem -> Hierarchy`. Always set `category`. A problem also needs `meta`. The engine refuses a write where the meta does not belong to the category or the problem to the meta; list valid names with `values system/high/problem meta --given category="name"`.
 
-## Relations
-
-Category is required for every system note.
-
-| Kind | Required links | Constraints |
-| - | - | - |
-| `meta` | `category` | Category must exist |
-| `problem` | `category`, `meta` | Meta must exist and belong to the same category |
-| `hierarchy` | `category` | Optional `meta` must be from same category; optional `problem` must be from same category; if both set, problem must belong to the selected meta |
-
-This enforces the chain `Category -> Meta -> Problem -> Hierarchy`.
-
-## Where To Get Names
-
-> **Schema:** `Field` ➔ `Fast Command` ➔ `Fallback` (format: `obsidian search query="<Fallback>"`)
-
-- `category` ➔ `rg --files -g "*.md" base/categories` ➔ `tag:system/category`
-- `meta` ➔ `rg --files -g "*.md" base/_meta-notes` ➔ `tag:system/high/meta`
-- `problem` ➔ `rg --files -g "*.md" base/_problems` ➔ `tag:system/high/problem`
-
-Recommendation: request names only if the creation script returned an error or the user instructed to add links to these fields. In other cases, use default tools.
+If no existing category fits, stop and ask the user. Do not pick a loose match and do not propose creating one yourself.

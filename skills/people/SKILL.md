@@ -5,66 +5,35 @@ description: 'Create notes for people and organizations. INVOKE when user wants 
 
 # People
 
-**Contact**
-A contact note is a structured node representing a direct personal or professional relationship. It captures interaction history, shared context, and ongoing collaborations. Its primary purpose is to map your active network, linking individuals directly to your projects, meetings, and areas of responsibility.
+**Contact.** A direct personal or professional relationship. Captures interaction history, shared context and collaborations, and links the person to projects, meetings and areas of responsibility.
 
-**Creator**
-A creator note represents an author, researcher, or public figure whose work you consume rather than interact with directly. It acts as an anchor for their intellectual output, aggregating associated source notes, methodologies, and core ideas to track their influence across your knowledge base.
+**Creator.** An author, researcher or public figure whose work you consume rather than interact with. Anchors their output: sources, methods and core ideas.
 
-**Production**
-A production note represents a collective entity, platform, or publisher that produces, hosts, or distributes work. It acts as an umbrella node, grouping affiliated creators, contacts, and source materials to map the broader organizational or media ecosystem behind individual resources and ideas.
+**Production.** A collective entity, platform or publisher that produces, hosts or distributes work. Groups affiliated creators, contacts and sources.
 
 ## Commands
 
-| Action | Command |
+Run from the vault root: `V="python3 .claude/_engine/vault.py"`
+
+| Need | Command |
 | - | - |
-| Create people note | `python3 ".claude/skills/people/scripts/people.py" create --title "Name" --tag contact/working [options]` |
-| Update people note | `python3 ".claude/skills/people/scripts/people.py" update --title "Name" --tag contact/working [options]` |
+| Types and what each is for | `$V types contact` |
+| Fields, allowed values and their meaning | `$V schema creator/writer` |
+| Note names a link field accepts | `$V values creator/writer category --like "text"` |
+| Create | `$V new creator/writer --title "Title" --set key=value [--body-file FILE]` |
+| Change metadata | `$V set "Title" key=value` (lists: `add`, `remove`) |
+| Validate after a direct edit | `$V check "Title"` |
+| Same for the other two families | `$V types creator`, `$V types production` |
 
-Recommendation: direct editing in the note is the default way to update content. Use `update` mainly when you want to modify notes via script from any working directory.
+The engine reads the vault manifests, fills fixed values, defaults, `created` and `updated`, and takes the note body scaffold from the type's template. It refuses invalid input, writes nothing, and says what to fix. Correct the input. Never work around an error by writing frontmatter by hand.
 
-## People Options
+- Repeat `--set key=value` to build a list. Link fields take plain note names.
+- Pass only what you know. Skip a field instead of guessing a value.
+- Edit the note body directly. A hook validates every edit; without hooks run `check`.
 
-| Option | Explanation |
-| - | - |
-| `--title` | Required for `create` and `update` (note filename) |
-| `--tag` | Single type-specific tag, required |
-| `--alias` | Repeatable alias |
-| `--description` | Short description |
-| `--category`, `--meta`, `--problem` | Repeatable taxonomy links |
-| `--relevant` | `true` or `false` |
-| `--body` | Note body |
+## Choosing values
 
-In `update`, only passed fields are changed. List fields replace the entire list.
-
-## Required Body Block
-
-Every people note must start with the tasks callout block. The script enforces this and always inserts it at the very beginning of the body if missing.
-
-## Where To Get Names
-
-> **Schema:** `Field` ➔ `Fast Command` ➔ `Fallback` (format: `obsidian search query="<Fallback>"`)
-
-- `category` ➔ `rg --files -g "*.md" base/categories` ➔ `tag:system/category`
-- `meta` ➔ `rg --files -g "*.md" base/_meta-notes` ➔ `tag:system/high/meta`
-- `problem` ➔ `rg --files -g "*.md" base/_problems` ➔ `tag:system/high/problem`
-
-Recommendation: request names only if the creation script returned an error or the user instructed to add links to these fields. In other cases, use default tools.
-
-## Contact Tags
-
-```bash
-obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/contacts')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
-```
-
-## Creator Tags
-
-```bash
-obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/creators')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
-```
-
-## Production Tags
-
-```bash
-obsidian eval code="app.vault.getMarkdownFiles().filter(f=>f.path.startsWith('templates/create/productions')&&f.basename==='manifest').map(f=>{const m=(app.metadataCache.getFileCache(f)?.frontmatter?.target?.query||'').match(/#([\w/-]+)/);return m&&m[1].includes('/')?m[1]:null}).filter(Boolean).sort().join(', ')"
-```
+- Contact, creator or production is decided by the relationship, not by fame: someone the user talks to is a contact even if they also publish.
+- The title is the name as the user writes it. Put other spellings into `aliases`.
+- No category fits: ask the user. If the user asked for the closest one, pick it and say which one you picked. Never invent a category.
+- The tabs block at the top of the body comes from the template. Keep it when editing the body.
