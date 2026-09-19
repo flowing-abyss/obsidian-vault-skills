@@ -1,2 +1,4 @@
 settings.local.json
 __pycache__
+_engine/local/state/
+_engine/local/docs/
