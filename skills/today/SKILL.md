@@ -62,13 +62,7 @@ User: "today" / "start my day" / "kick me" / "feed" / "briefing"
    - NO  -> create it with frontmatter
    - YES -> read its content
     |
-3. INBOX MIGRATION — collect all #task/inbox from past daily notes:
-   a. Grep for "#task/inbox" in periodic/daily/*.md (exclude today)
-   b. Collect all matching task lines (full line, preserving formatting)
-   c. DELETE those lines from source notes (Edit tool)
-   d. Hold collected tasks for briefing callout (Inbox section)
-    |
-4. Gather context (ALL of this, in parallel where possible):
+3. Gather context (ALL of this, in parallel where possible):
    a. Read last 3-5 daily notes
    b. Find active projects (status 🟥 or 🟦), read their content
    c. Read 5-10 recently modified vault notes (base/, sources/)
@@ -79,78 +73,16 @@ User: "today" / "start my day" / "kick me" / "feed" / "briefing"
       This tells you what the user committed to this week. Use it to align the seed
       and materials with their actual declared intention.
     |
-5. Generate briefing content:
+4. Generate briefing content:
    a. SEED — one sharp idea/thought/connection based on vault context
    b. MATERIALS — relevant vault links organized by usefulness
    c. PROJECT FEED — connections for active projects
    d. THREADS — unfinished business from recent days
     |
-6. WRITE the briefing directly into the daily note (append after existing content)
+5. WRITE the briefing directly into the daily note (append after existing content)
     |
-7. Brief confirmation in chat (1-2 lines max)
+6. Brief confirmation in chat (1-2 lines max)
 ```
-
-## Inbox Migration
-
-Every run, collect ALL unchecked `#task/inbox` tasks from past daily notes
-and move them to today's note. This is the GTD "process inbox" step — automated.
-
-### Process
-
-1. **Find inbox tasks:**
-```bash
-obsidian search:context query="task-todo:#task/inbox" path=periodic/daily  # open inbox tasks only
-```
-
-2. **Filter:**
-   - Only from daily notes BEFORE today (not from today's note itself)
-   - Only unchecked tasks (`- [ ]`), skip completed (`- [x]`)
-   - Preserve the FULL task line (tags, categories, priorities, dates, links, subtasks)
-
-3. **Collect task lines** from each source file. Example task formats:
-```markdown
-- [ ] #task/inbox Add Espanso script to Gists
-- [ ] #task/inbox #category/public Record video about X
-- [ ] #task/inbox Urgent task 🔺 📅 2026-02-15
-```
-
-4. **Delete from source notes:**
-   - Use Edit tool to remove each collected task line from its source file
-   - If a task has subtasks (indented lines below it), move those too
-   - If removing a task leaves trailing blank lines, clean them up
-   - After deletion, check if the source note is now empty (only frontmatter,
-     no text, no tasks, only whitespace after `---`). If so — DELETE the file entirely
-
-5. **Include in briefing callout:**
-   - Inbox tasks go INSIDE the briefing callout as the first section (`**Inbox:**`)
-   - Each task line prefixed with `> ` to be part of the callout
-   - Subtasks prefixed with `> ` + their original indentation
-   - Preserve original formatting (tags, priorities, dates, links)
-
-### Subtask handling
-
-Some inbox tasks have subtasks (indented lines). Move the entire block.
-Inside the callout it looks like:
-```markdown
-> - [ ] #task/inbox #task/multistep #category/public Record video
-> 	- [ ] ⤵️ Prepare outline
-> 	- [ ] ⤵️ Record audio
-```
-All indented lines following a `#task/inbox` line belong to that task.
-Each line gets `> ` prefix to stay inside the callout.
-
-### Edge cases
-
-- **No inbox tasks found** — skip this step silently, don't mention it
-- **Tasks already in today's note** — don't duplicate; if a task with identical
-  text already exists in today, skip it
-- **Multiple tasks from same file** — remove all of them, do a single edit per file
-- **Empty note after deletion** — if a past daily note has ONLY frontmatter left
-  (no text, no tasks, no content — just YAML between `---` and whitespace),
-  delete the file with `rm`. "Empty" = nothing meaningful after the closing `---`
-- **Never delete today's note** — only past daily notes get cleaned up
-
----
 
 ## Context Gathering
 
@@ -212,10 +144,6 @@ Appended AFTER any existing content in the note.
 
 ```markdown
 > [!briefing]- Briefing
-> **Inbox:**
-> - [ ] #task/inbox Add Espanso script to Gists
-> - [ ] #task/inbox #category/public Record video about X
->
 > **Seed:** [One provocative idea/thought/connection — see Seed Generation below]
 >
 > **Materials:**
@@ -296,7 +224,7 @@ Looking at the last week: you keep returning to [theme] from different angles
 - **Concise** — 2-4 sentences max
 - **Grounded** — must come from actual vault content, not generic advice
 - **One seed only** — don't scatter across multiple ideas
-- **Weekly-aware** — if the user wrote a weekly focus in the weekly note (step 4f), prefer seed types that connect to or extend that focus. Don't ignore stated intention — either support it or surface a productive tension with it.
+- **Weekly-aware** — if the user wrote a weekly focus in the weekly note (step 3f), prefer seed types that connect to or extend that focus. Don't ignore stated intention — either support it or surface a productive tension with it.
 
 ## Materials Section
 
@@ -358,7 +286,6 @@ After writing into the note, confirm in chat. Keep it minimal:
 ```
 Briefing written to periodic/daily/2026-02-11.md
 
-Inbox: 3 tasks moved (from 2026-02-09, 2026-02-08).
 Seed: connection between [[X]] and [[Y]].
 3 materials, 2 project links, 1 open thread.
 ```
@@ -368,12 +295,9 @@ If the note didn't exist — mention it was created:
 ```
 Created periodic/daily/2026-02-11.md with briefing.
 
-Inbox: 1 task moved (from 2026-02-09).
 Seed: your idea about [X] has an unexplored angle.
 4 materials, 1 project link, 2 threads.
 ```
-
-If no inbox tasks were found, omit the "Inbox:" line entirely.
 
 ## Language
 
