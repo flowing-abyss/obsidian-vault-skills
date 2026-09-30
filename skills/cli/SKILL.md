@@ -9,6 +9,8 @@ Use the `obsidian` CLI to interact with a running Obsidian instance. Requires Ob
 
 **REQUIRES:** Obsidian 1.12+ with CLI enabled: Settings → General → Command line interface.
 
+Run `obsidian help` to see all available commands. It is always up to date, so use it when a command below is missing or fails. Full docs: https://help.obsidian.md/cli
+
 ## Syntax
 
 **Parameters** take a value with `=`. Quote values with spaces:
